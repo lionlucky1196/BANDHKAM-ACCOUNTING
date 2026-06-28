@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Accounting - बांधकाम हिशोब</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Login Screen */
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 40px 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #edf2f7;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-danger {
+            background: #fc8181;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #f56565;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .error-msg {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .success-msg {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-msg.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* Main App */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left h2 {
+            font-size: 24px;
+            color: #2d3748;
+        }
+
+        .header-left p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .lang-toggle {
+            background: #edf2f7;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle:hover {
+            background: #e2e8f0;
+        }
+
+        .logout-btn {
+            background: #fc8181;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #f56565;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            border: none;
+            background: #f7fafc;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: #edf2f7;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .card.income {
+            border-left: 4px solid #48bb78;
+        }
+
+        .card.expense {
+            border-left: 4px solid #f56565;
+        }
+
+        .card.balance {
+            border-left: 4px solid #4299e1;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        .section-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-income {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-expense {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .badge-admin {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-staff {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-tabs {
+                flex-wrap: nowrap;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .login-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .demo-notice {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #7d6608;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="logo">
+                <div class="logo-icon">🏗️</div>
+                <h1 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h1>
+                <p data-lang-mr="तुमचा बांधकाम व्यवसाय सोपा करा" data-lang-en="Simplify your construction business">तुमचा बांधकाम व्यवसाय सोपा करा</p>
+            </div>
+            <div id="loginError" class="error-msg"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</label>
+                    <input type="text" id="loginUsername" required placeholder="lucky / jitesh">
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="पासवर्ड" data-lang-en="Password">पासवर्ड</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary" data-lang-mr="लॉगिन" data-lang-en="Login">लॉगिन</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="screen">
+        <div class="app-container">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h2 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h2>
+                    <p id="welcomeMsg"></p>
+                </div>
+                <div class="header-right">
+                    <button class="lang-toggle" id="langToggle">EN</button>
+                    <button class="logout-btn" id="logoutBtn" data-lang-mr="लॉगआउट" data-lang-en="Logout">लॉगआउट</button>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-section="dashboard" data-lang-mr="डॅशबोर्ड" data-lang-en="Dashboard">डॅशबोर्ड</button>
+                <button class="nav-tab" data-section="transactions" data-lang-mr="व्यवहार" data-lang-en="Transactions">व्यवहार</button>
+                <button class="nav-tab" data-section="sites" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</button>
+                <button class="nav-tab admin-only" data-section="staff" data-lang-mr="कर्मचारी" data-lang-en="Staff">कर्मचारी</button>
+                <button class="nav-tab" data-section="reports" data-lang-mr="अहवाल" data-lang-en="Reports">अहवाल</button>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <div id="demoNotice" class="demo-notice" style="display:none;">
+                    ⚠️ <strong>Demo Mode:</strong> Supabase setup नाही. Data localStorage मध्ये save होतो. Setup केल्यावर सर्व devices वर sync होईल.
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card income">
+                        <div class="card-icon">💰</div>
+                        <div class="card-title" data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</div>
+                        <div class="card-value" id="totalIncome">₹0</div>
+                    </div>
+                    <div class="card expense">
+                        <div class="card-icon">💸</div>
+                        <div class="card-title" data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</div>
+                        <div class="card-value" id="totalExpense">₹0</div>
+                    </div>
+                    <div class="card balance">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title" data-lang-mr="शिल्लक" data-lang-en="Balance">शिल्लक</div>
+                        <div class="card-value" id="totalBalance">₹0</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3 class="section-title" data-lang-mr="अलीकडील व्यवहार" data-lang-en="Recent Transactions">अलीकडील व्यवहार</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
+                                    <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
+                                    <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
+                                    <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTransactions"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Section -->
+            <div id="transactions" class="content-section">
+                <div class="section-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 class="section-title" style="margin: 0;" data-lang-mr="सर्व व्यवहार" data-lang-en="All Transactions">सर्व व्यवहार</h3>
+                        <button class="btn btn-primary" id="addTransactionBtn" data-lang-mr="+ नवीन" data-lang-en="+ Add New">+ नवीन</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
+                                    <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
+                                    <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
+                                    <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                                    <th data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</th>
+                                    <th data-lang-mr="नोंद" data-lang-en="Note">नोंद</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allTransactions"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sites Section -->
+            <div id="sites" class="content-section">
+                <div class="section-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 class="section-title" style="margin: 0;" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</h3>
+                        <button class="btn btn-primary admin-only" id="addSiteBtn" data-lang-mr="+ नवीन साइट" data-lang-en="+ Add Site">+ नवीन साइट</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</th>
+                                    <th data-lang-mr="स्थान" data-lang-en="Location">स्थान</th>
+                                    <th data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</th>
+                                    <th data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sitesList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Section (Admin Only) -->
+            <div id="staff" class="content-section">
+                <div class="section-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 class="section-title" style="margin: 0;" data-lang-mr="कर्मचारी व्यवस्थापन" data-lang-en="Staff Management">कर्मचारी व्यवस्थापन</h3>
+                        <button class="btn btn-primary" id="addStaffBtn" data-lang-mr="+ नवीन कर्मचारी" data-lang-en="+ Add Staff">+ नवीन कर्मचारी</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang-mr="नाव" data-lang-en="Name">नाव</th>
+                                    <th data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</th>
+                                    <th data-lang-mr="भूमिका" data-lang-en="Role">भूमिका</th>
+                                    <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports" class="content-section">
+                <div class="section-card">
+                    <h3 class="section-title" data-lang-mr="साइट-निहाय अहवाल" data-lang-en="Site-wise Report">साइट-निहाय अहवाल</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                                    <th data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</th>
+                                    <th data-lang-mr="खर्च" data-lang-en="Expense">खर्च</th>
+                                    <th data-lang-mr="नफा/तोटा" data-lang-en="Profit/Loss">नफा/तोटा</th>
+                                </tr>
+                            </thead>
+                            <tbody id="siteReports"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Transaction Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-lang-mr="नवीन व्यवहार" data-lang-en="New Transaction">नवीन व्यवहार</h3>
+                <button class="close-btn" onclick="closeModal('transactionModal')">&times;</button>
+            </div>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label data-lang-mr="तारीख" data-lang-en="Date">तारीख</label>
+                    <input type="date" id="transDate" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</label>
+                    <select id="transType" required>
+                        <option value="income" data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</option>
+                        <option value="expense" data-lang-mr="खर्च" data-lang-en="Expense">खर्च</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</label>
+                    <input type="number" id="transAmount" required placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="साइट" data-lang-en="Site">साइट</label>
+                    <select id="transSite" required></select>
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</label>
+                    <select id="transPaymentMode" required>
+                        <option value="cash" data-lang-mr="रोख" data-lang-en="Cash">रोख</option>
+                        <option value="upi" data-lang-mr="UPI" data-lang-en="UPI">UPI</option>
+                        <option value="bank" data-lang-mr="बँक" data-lang-en="Bank">बँक</option>
+                        <option value="cheque" data-lang-mr="धनादेश" data-lang-en="Cheque">धनादेश</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="नोंद" data-lang-en="Note">नोंद</label>
+                    <textarea id="transNote" rows="3" placeholder="Optional"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Site Modal -->
+    <div id="siteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-lang-mr="नवीन साइट" data-lang-en="New Site">नवीन साइट</h3>
+                <button class="close-btn" onclick="closeModal('siteModal')">&times;</button>
+            </div>
+            <form id="siteForm">
+                <div class="form-group">
+                    <label data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</label>
+                    <input type="text" id="siteName" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="स्थान" data-lang-en="Location">स्थान</label>
+                    <input type="text" id="siteLocation" required>
+                </div>
+                <button type="submit" class="btn btn-primary" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Staff Modal -->
+    <div id="staffModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-lang-mr="नवीन कर्मचारी" data-lang-en="New Staff">नवीन कर्मचारी</h3>
+                <button class="close-btn" onclick="closeModal('staffModal')">&times;</button>
+            </div>
+            <form id="staffForm">
+                <div class="form-group">
+                    <label data-lang-mr="नाव" data-lang-en="Name">नाव</label>
+                    <input type="text" id="staffName" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</label>
+                    <input type="text" id="staffUsername" required>
+                </div>
+                <div class="form-group">
+                    <label data-lang-mr="पासवर्ड" data-lang-en="Password">पासवर्ड</label>
+                    <input type="password" id="staffPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration - REPLACE WITH YOUR CREDENTIALS LATER
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        let supabase = null;
+        let useSupabase = false;
+        
+        try {
+            if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                useSupabase = true;
+                console.log('✅ Supabase connected');
+            } else {
+                console.log('⚠️ Demo mode - using localStorage');
+            }
+        } catch (error) {
+            console.error('Supabase init error:', error);
+            useSupabase = false;
+        }
+
+        // Hardcoded Admin Users
+        const ADMIN_USERS = [
+            { username: 'lucky', password: '1196', role: 'admin', name: 'Lucky' },
+            { username: 'jitesh', password: '2000', role: 'admin', name: 'Jitesh' }
+        ];
+
+        let currentUser = null;
+        let currentLang = 'mr';
+
+        // Language translations
+        const translations = {
+            mr: {
+                welcome: 'स्वागत',
+                totalIncome: 'एकूण उत्पन्न',
+                totalExpense: 'एकूण खर्च',
+                balance: 'शिल्लक',
+                date: 'तारीख',
+                type: 'प्रकार',
+                amount: 'रक्कम',
+                site: 'साइट',
+                paymentMode: 'पेमेंट मोड',
+                note: 'नोंद',
+                income: 'उत्पन्न',
+                expense: 'खर्च',
+                admin: 'प्रशासक',
+                staff: 'कर्मचारी',
+                delete: 'हटवा',
+                loginError: 'चुकीचा युजरनेम किंवा पासवर्ड',
+                transactionAdded: 'व्यवहार जोडला',
+                siteAdded: 'साइट जोडली',
+                staffAdded: 'कर्मचारी जोडला',
+                staffDeleted: 'कर्मचारी हटवला'
+            },
+            en: {
+                welcome: 'Welcome',
+                totalIncome: 'Total Income',
+                totalExpense: 'Total Expense',
+                balance: 'Balance',
+                date: 'Date',
+                type: 'Type',
+                amount: 'Amount',
+                site: 'Site',
+                paymentMode: 'Payment Mode',
+                note: 'Note',
+                income: 'Income',
+                expense: 'Expense',
+                admin: 'Admin',
+                staff: 'Staff',
+                delete: 'Delete',
+                loginError: 'Invalid username or password',
+                transactionAdded: 'Transaction added',
+                siteAdded: 'Site added',
+                staffAdded: 'Staff added',
+                staffDeleted: 'Staff deleted'
+            }
+        };
+
+        // LocalStorage helpers for demo mode
+        const Storage = {
+            get: (key) => {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : [];
+            },
+            set: (key, data) => {
+                localStorage.setItem(key, JSON.stringify(data));
+            },
+            add: (key, item) => {
+                const data = Storage.get(key);
+                item.id = Date.now();
+                data.push(item);
+                Storage.set(key, data);
+                return item;
+            },
+            delete: (key, id) => {
+                const data = Storage.get(key).filter(item => item.id !== id);
+                Storage.set(key, data);
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('App initialized');
+            checkAuth();
+            setupEventListeners();
+            
+            // Show demo notice if not using Supabase
+            if (!useSupabase) {
+                setTimeout(() => {
+                    const notice = document.getElementById('demoNotice');
+                    if (notice) notice.style.display = 'block';
+                }, 100);
+            }
+        });
+
+        function checkAuth() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                currentUser = JSON.parse(user);
+                showMainApp();
+            }
+        }
+
+        function setupEventListeners() {
+            // Login
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            
+            // Language toggle
+            document.getElementById('langToggle').addEventListener('click', toggleLanguage);
+            
+            // Navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchSection(tab.dataset.section));
+            });
+            
+            // Add buttons
+            document.getElementById('addTransactionBtn').addEventListener('click', () => openModal('transactionModal'));
+            document.getElementById('addSiteBtn').addEventListener('click', () => openModal('siteModal'));
+            document.getElementById('addStaffBtn').addEventListener('click', () => openModal('staffModal'));
+            
+            // Forms
+            document.getElementById('transactionForm').addEventListener('submit', handleTransactionSubmit);
+            document.getElementById('siteForm').addEventListener('submit', handleSiteSubmit);
+            document.getElementById('staffForm').addEventListener('submit', handleStaffSubmit);
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            console.log('Login attempt:', username);
+
+            // Check hardcoded admins
+            const admin = ADMIN_USERS.find(u => u.username === username && u.password === password);
+            if (admin) {
+                console.log('✅ Admin login successful');
+                currentUser = admin;
+                localStorage.setItem('currentUser', JSON.stringify(admin));
+                showMainApp();
+                return;
+            }
+
+            // Check Supabase staff (if configured)
+            if (useSupabase) {
+                try {
+                    const { data, error } = await supabase
+                        .from('staff')
+                        .select('*')
+                        .eq('username', username)
+                        .eq('password', password)
+                        .single();
+
+                    if (data) {
+                        console.log('✅ Staff login successful');
+                        currentUser = { ...data, role: 'staff' };
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        showMainApp();
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Supabase login error:', error);
+                }
+            }
+
+            // Check localStorage staff (demo mode)
+            const staff = Storage.get('staff').find(s => s.username === username && s.password === password);
+            if (staff) {
+                console.log('✅ Staff login successful (demo)');
+                currentUser = { ...staff, role: 'staff' };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showMainApp();
+                return;
+            }
+
+            console.log('❌ Login failed');
+            errorDiv.textContent = translations[currentLang].loginError;
+            errorDiv.classList.add('show');
+            setTimeout(() => errorDiv.classList.remove('show'), 3000);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('mainApp').classList.remove('active');
+            document.getElementById('loginScreen').classList.add('active');
+            document.getElementById('loginForm').reset();
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.remove('active');
+            document.getElementById('mainApp').classList.add('active');
+            
+            const welcomeText = translations[currentLang].welcome;
+            document.getElementById('welcomeMsg').textContent = `${welcomeText}, ${currentUser.name}!`;
+            
+            // Hide admin-only elements for staff
+            if (currentUser.role !== 'admin') {
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+            } else {
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+            }
+            
+            loadDashboard();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'mr' ? 'en' : 'mr';
+            document.getElementById('langToggle').textContent = currentLang === 'mr' ? 'EN' : 'मराठी';
+            
+            document.querySelectorAll('[data-lang-mr]').forEach(el => {
+                el.textContent = el.dataset[`lang${currentLang.charAt(0).toUpperCase() + currentLang.slice(1)}`];
+            });
+            
+            loadDashboard();
+        }
+
+        function switchSection(sectionId) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            document.getElementById(sectionId).classList.add('active');
+            
+            if (sectionId === 'dashboard') loadDashboard();
+            else if (sectionId === 'transactions') loadTransactions();
+            else if (sectionId === 'sites') loadSites();
+            else if (sectionId === 'staff') loadStaff();
+            else if (sectionId === 'reports') loadReports();
+        }
+
+        async function loadDashboard() {
+            let transactions = [];
+            
+            if (useSupabase) {
+                try {
+                    const { data } = await supabase.from('transactions').select('*');
+                    transactions = data || [];
+                } catch (error) {
+                    console.error('Error loading transactions:', error);
+                }
+            } else {
+                transactions = Storage.get('transactions');
+            }
+            
+            let totalIncome = 0;
+            let totalExpense = 0;
+            
+            transactions.forEach(t => {
+                if (t.type === 'income') totalIncome += parseFloat(t.amount);
+                else totalExpense += parseFloat(t.amount);
+            });
+            
+            document.getElementById('totalIncome').textContent = `₹${totalIncome.toLocaleString()}`;
+            document.getElementById('totalExpense').textContent = `₹${totalExpense.toLocaleString()}`;
+            document.getElementById('totalBalance').textContent = `₹${(totalIncome - totalExpense).toLocaleString()}`;
+            
+            // Recent transactions
+            const recent = transactions.slice(-5).reverse();
+            const tbody = document.getElementById('recentTransactions');
+            tbody.innerHTML = recent.map(t => `
+                <tr>
+                    <td>${t.date}</td>
+                    <td><span class="badge badge-${t.type}">${translations[currentLang][t.type]}</span></td>
+                    <td>₹${parseFloat(t.amount).toLocaleString()}</td>
+                    <td>${t.site_name}</td>
+                </tr>
+            `).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No transactions yet</td></tr>';
+        }
+
+        async function loadTransactions() {
+            let transactions = [];
+            
+            if (useSupabase) {
+                try {
+                    const { data } = await supabase.from('transactions').select('*').order('date', { ascending: false });
+                    transactions = data || [];
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                transactions = Storage.get('transactions').reverse();
+            }
+            
+            const tbody = document.getElementById('allTransactions');
+            tbody.innerHTML = transactions.map(t => `
+                <tr>
+                    <td>${t.date}</td>
+                    <td><span class="badge badge-${t.type}">${translations[currentLang][t.type]}</span></td>
+                    <td>₹${parseFloat(t.amount).toLocaleString()}</td>
+                    <td>${t.site_name}</td>
+                    <td>${t.payment_mode}</td>
+                    <td>${t.note || '-'}</td>
+                </tr>
+            `).join('') || '<tr><td colspan="6" style="text-align:center;color:#718096;">No transactions yet</td></tr>';
+        }
+
+        async function loadSites() {
+            let sites = [];
+            let transactions = [];
+            
+            if (useSupabase) {
+                try {
+                    const { data: sitesData } = await supabase.from('sites').select('*');
+                    const { data: transData } = await supabase.from('transactions').select('*');
+                    sites = sitesData || [];
+                    transactions = transData || [];
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                sites = Storage.get('sites');
+                transactions = Storage.get('transactions');
+            }
+            
+            const tbody = document.getElementById('sitesList');
+            tbody.innerHTML = sites.map(site => {
+                const siteTrans = transactions.filter(t => t.site_id === site.id);
+                const income = siteTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                const expense = siteTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                
+                return `
+                    <tr>
+                        <td>${site.name}</td>
+                        <td>${site.location}</td>
+                        <td>₹${income.toLocaleString()}</td>
+                        <td>₹${expense.toLocaleString()}</td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No sites yet</td></tr>';
+            
+            // Update site dropdown
+            const select = document.getElementById('transSite');
+            select.innerHTML = sites.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        }
+
+        async function loadStaff() {
+            if (currentUser.role !== 'admin') return;
+            
+            let staff = [];
+            
+            if (useSupabase) {
+                try {
+                    const { data } = await supabase.from('staff').select('*');
+                    staff = data || [];
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                staff = Storage.get('staff');
+            }
+            
+            const tbody = document.getElementById('staffList');
+            tbody.innerHTML = staff.map(s => `
+                <tr>
+                    <td>${s.name}</td>
+                    <td>${s.username}</td>
+                    <td><span class="badge badge-staff">${translations[currentLang].staff}</span></td>
+                    <td><button class="btn btn-danger" onclick="deleteStaff(${s.id})">${translations[currentLang].delete}</button></td>
+                </tr>
+            `).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No staff yet</td></tr>';
+        }
+
+        async function loadReports() {
+            let sites = [];
+            let transactions = [];
+            
+            if (useSupabase) {
+                try {
+                    const { data: sitesData } = await supabase.from('sites').select('*');
+                    const { data: transData } = await supabase.from('transactions').select('*');
+                    sites = sitesData || [];
+                    transactions = transData || [];
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                sites = Storage.get('sites');
+                transactions = Storage.get('transactions');
+            }
+            
+            const tbody = document.getElementById('siteReports');
+            tbody.innerHTML = sites.map(site => {
+                const siteTrans = transactions.filter(t => t.site_id === site.id);
+                const income = siteTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                const expense = siteTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                const profit = income - expense;
+                
+                return `
+                    <tr>
+                        <td>${site.name}</td>
+                        <td>₹${income.toLocaleString()}</td>
+                        <td>₹${expense.toLocaleString()}</td>
+                        <td style="color: ${profit >= 0 ? '#48bb78' : '#f56565'}">₹${profit.toLocaleString()}</td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No data yet</td></tr>';
+        }
+
+        async function handleTransactionSubmit(e) {
+            e.preventDefault();
+            
+            const siteId = document.getElementById('transSite').value;
+            let siteName = '';
+            
+            if (useSupabase) {
+                try {
+                    const { data: site } = await supabase.from('sites').select('name').eq('id', siteId).single();
+                    siteName = site?.name || '';
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                const site = Storage.get('sites').find(s => s.id == siteId);
+                siteName = site?.name || '';
+            }
+            
+            const transaction = {
+                date: document.getElementById('transDate').value,
+                type: document.getElementById('transType').value,
+                amount: document.getElementById('transAmount').value,
+                site_id: siteId,
+                site_name: siteName,
+                payment_mode: document.getElementById('transPaymentMode').value,
+                note: document.getElementById('transNote').value,
+                added_by: currentUser.username
+            };
+            
+            if (useSupabase) {
+                try {
+                    await supabase.from('transactions').insert([transaction]);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                Storage.add('transactions', transaction);
+            }
+            
+            closeModal('transactionModal');
+            document.getElementById('transactionForm').reset();
+            loadDashboard();
+            alert(translations[currentLang].transactionAdded);
+        }
+
+        async function handleSiteSubmit(e) {
+            e.preventDefault();
+            
+            const site = {
+                name: document.getElementById('siteName').value,
+                location: document.getElementById('siteLocation').value
+            };
+            
+            if (useSupabase) {
+                try {
+                    await supabase.from('sites').insert([site]);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                Storage.add('sites', site);
+            }
+            
+            closeModal('siteModal');
+            document.getElementById('siteForm').reset();
+            loadSites();
+            alert(translations[currentLang].siteAdded);
+        }
+
+        async function handleStaffSubmit(e) {
+            e.preventDefault();
+            
+            const staff = {
+                name: document.getElementById('staffName').value,
+                username: document.getElementById('staffUsername').value,
+                password: document.getElementById('staffPassword').value
+            };
+            
+            if (useSupabase) {
+                try {
+                    await supabase.from('staff').insert([staff]);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                Storage.add('staff', staff);
+            }
+            
+            closeModal('staffModal');
+            document.getElementById('staffForm').reset();
+            loadStaff();
+            alert(translations[currentLang].staffAdded);
+        }
+
+        async function deleteStaff(id) {
+            if (confirm('Are you sure?')) {
+                if (useSupabase) {
+                    try {
+                        await supabase.from('staff').delete().eq('id', id);
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                } else {
+                    Storage.delete('staff', id);
+                }
+                loadStaff();
+                alert(translations[currentLang].staffDeleted);
+            }
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+    </script>
+</body>
+</html>
