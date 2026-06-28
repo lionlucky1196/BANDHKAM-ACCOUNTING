@@ -13,76 +13,12 @@ body {
     min-height: 100vh;
     color: #2d3748;
 }
-.screen { display: none; animation: fadeIn 0.5s ease-in; }
-.screen.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* Login */
-.login-container {
-    max-width: 420px;
-    margin: 40px auto;
-    padding: 40px 30px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-    animation: slideIn 0.6s ease-out;
-}
-.logo { text-align: center; margin-bottom: 30px; }
-.logo-icon { font-size: 60px; margin-bottom: 10px; animation: pulse 2s infinite; }
-.logo h1 { font-size: 26px; font-weight: 700; color: #2d3748; margin-bottom: 5px; }
-.logo p { color: #718096; font-size: 14px; }
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #4a5568; font-size: 14px; }
-.form-group input, .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 15px;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-    background: white;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-.btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-}
-.btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3); }
-.btn-success { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; }
-.btn-success:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(72, 187, 120, 0.3); }
-.btn-warning { background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); color: white; }
-.btn-warning:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(237, 137, 54, 0.3); }
-.btn-danger { background: #fc8181; color: white; padding: 6px 14px; font-size: 13px; }
-.btn-danger:hover { background: #f56565; }
-.btn-block { width: 100%; }
-.error-msg {
-    background: #fed7d7;
-    color: #c53030;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 14px;
-    display: none;
-}
-.error-msg.show { display: block; animation: fadeIn 0.3s; }
+.app-container { max-width: 1200px; margin: 0 auto; padding: 20px; animation: fadeIn 0.5s; }
 
-/* Main App */
-.app-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .header {
     background: white;
     padding: 20px;
@@ -95,10 +31,13 @@ body {
     flex-wrap: wrap;
     gap: 15px;
 }
+.header-left { display: flex; align-items: center; gap: 15px; }
+.header-logo { font-size: 40px; animation: pulse 2s infinite; }
 .header-left h2 { font-size: 22px; color: #2d3748; }
 .header-left p { color: #718096; font-size: 13px; }
 .header-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.lang-toggle, .logout-btn, .backup-btn {
+
+.lang-toggle, .backup-btn {
     border: none;
     padding: 8px 16px;
     border-radius: 8px;
@@ -109,11 +48,9 @@ body {
     font-size: 14px;
 }
 .lang-toggle { background: #edf2f7; color: #4a5568; }
-.lang-toggle:hover { background: #e2e8f0; }
-.logout-btn { background: #fc8181; color: white; }
-.logout-btn:hover { background: #f56565; }
+.lang-toggle:hover { background: #e2e8f0; transform: translateY(-2px); }
 .backup-btn { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; }
-.backup-btn:hover { transform: translateY(-2px); }
+.backup-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3); }
 
 .nav-tabs {
     background: white;
@@ -189,12 +126,29 @@ tr:hover { background: #f7fafc; }
 .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-block; }
 .badge-income { background: #c6f6d5; color: #22543d; }
 .badge-expense { background: #fed7d7; color: #742a2a; }
-.badge-staff { background: #bee3f8; color: #2c5282; }
-.badge-admin { background: #c6f6d5; color: #22543d; }
-.badge-pending { background: #feebc8; color: #7c2d12; }
-.badge-approved { background: #c6f6d5; color: #22543d; }
 
-/* Modal */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+.btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3); }
+.btn-success { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; }
+.btn-success:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(72, 187, 120, 0.3); }
+.btn-warning { background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); color: white; }
+.btn-warning:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(237, 137, 54, 0.3); }
+.btn-danger { background: #fc8181; color: white; padding: 6px 14px; font-size: 13px; }
+.btn-danger:hover { background: #f56565; }
+.btn-edit { background: #4299e1; color: white; padding: 6px 14px; font-size: 13px; }
+.btn-edit:hover { background: #3182ce; }
+.btn-block { width: 100%; }
+
 .modal {
     display: none;
     position: fixed;
@@ -224,7 +178,24 @@ tr:hover { background: #f7fafc; }
 .modal-title { font-size: 18px; font-weight: 600; }
 .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #718096; line-height: 1; }
 
-/* Backup Section */
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #4a5568; font-size: 14px; }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    background: white;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 .backup-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -297,284 +268,213 @@ tr:hover { background: #f7fafc; }
 .status-msg.info { background: #bee3f8; color: #2c5282; display: block; }
 
 .action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-.btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; }
-.btn-approve { background: #48bb78; color: white; }
-.btn-reject { background: #f56565; color: white; }
-
-.info-box {
-    background: #ebf8ff;
-    border-left: 4px solid #4299e1;
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 13px;
-    color: #2c5282;
-}
 
 @media (max-width: 768px) {
     .header { flex-direction: column; align-items: flex-start; }
     .dashboard-grid { grid-template-columns: 1fr; }
-    .login-container { margin: 20px; padding: 30px 20px; }
     th, td { padding: 8px; font-size: 13px; }
 }
+
+@media print {
+    body { background: white; }
+    .header, .nav-tabs, .btn, .action-btns, .backup-btn, .lang-toggle { display: none !important; }
+    .section-card { box-shadow: none; page-break-inside: avoid; }
+    .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
+    .print-header h1 { font-size: 22px; color: #2d3748; }
+    .print-header p { color: #718096; font-size: 13px; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; page-break-after: auto; }
+}
+.print-header { display: none; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="screen active">
-    <div class="login-container">
-        <div class="logo">
-            <div class="logo-icon">🏗️</div>
-            <h1 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h1>
-            <p data-lang-mr="तुमचा बांधकाम व्यवसाय सोपा करा" data-lang-en="Simplify your construction business">तुमचा बांधकाम व्यवसाय सोपा करा</p>
+<div class="app-container">
+    <div class="print-header">
+        <h1>🏗️ बांधकाम हिशोब</h1>
+        <p>Construction Accounting Report</p>
+    </div>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="header-logo">🏗️</div>
+            <div>
+                <h2 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h2>
+                <p data-lang-mr="तुमचा बांधकाम व्यवसाय सोपा करा" data-lang-en="Simplify your construction business">तुमचा बांधकाम व्यवसाय सोपा करा</p>
+            </div>
         </div>
-        <div id="loginError" class="error-msg"></div>
-        <form id="loginForm">
-            <div class="form-group">
-                <label data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</label>
-                <input type="text" id="loginUsername" required autocomplete="username">
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="पासवर्ड" data-lang-en="Password">पासवर्ड</label>
-                <input type="password" id="loginPassword" required autocomplete="current-password">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" data-lang-mr="लॉगिन" data-lang-en="Login">लॉगिन</button>
-        </form>
-        <div style="margin-top:20px; text-align:center;">
-            <button class="lang-toggle" id="loginLangToggle">EN</button>
+        <div class="header-right">
+            <button class="lang-toggle" id="langToggle">EN</button>
+            <button class="backup-btn" onclick="switchSection('backup')" data-lang-mr="💾 बॅकअप" data-lang-en="💾 Backup">💾 बॅकअप</button>
         </div>
     </div>
-</div>
 
-<!-- MAIN APP -->
-<div id="mainApp" class="screen">
-    <div class="app-container">
-        <div class="header">
-            <div class="header-left">
-                <h2 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h2>
-                <p id="welcomeMsg"></p>
-            </div>
-            <div class="header-right">
-                <button class="lang-toggle" id="langToggle">EN</button>
-                <button class="backup-btn" onclick="switchSection('backup')" data-lang-mr="💾 बॅकअप" data-lang-en="💾 Backup">💾 बॅकअप</button>
-                <button class="logout-btn" id="logoutBtn" data-lang-mr="लॉगआउट" data-lang-en="Logout">लॉगआउट</button>
-            </div>
-        </div>
+    <div class="nav-tabs">
+        <button class="nav-tab active" data-section="dashboard" data-lang-mr="डॅशबोर्ड" data-lang-en="Dashboard">डॅशबोर्ड</button>
+        <button class="nav-tab" data-section="transactions" data-lang-mr="व्यवहार" data-lang-en="Transactions">व्यवहार</button>
+        <button class="nav-tab" data-section="sites" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</button>
+        <button class="nav-tab" data-section="reports" data-lang-mr="अहवाल" data-lang-en="Reports">अहवाल</button>
+        <button class="nav-tab" data-section="backup" data-lang-mr="बॅकअप" data-lang-en="Backup">बॅकअप</button>
+    </div>
 
-        <div class="nav-tabs" id="navTabs">
-            <button class="nav-tab active" data-section="dashboard" data-lang-mr="डॅशबोर्ड" data-lang-en="Dashboard">डॅशबोर्ड</button>
-            <button class="nav-tab" data-section="transactions" data-lang-mr="व्यवहार" data-lang-en="Transactions">व्यवहार</button>
-            <button class="nav-tab admin-only" data-section="sites" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</button>
-            <button class="nav-tab admin-only" data-section="staff" data-lang-mr="कर्मचारी" data-lang-en="Staff">कर्मचारी</button>
-            <button class="nav-tab admin-only" data-section="pending" data-lang-mr="प्रलंबित" data-lang-en="Pending">प्रलंबित</button>
-            <button class="nav-tab" data-section="reports" data-lang-mr="अहवाल" data-lang-en="Reports">अहवाल</button>
-            <button class="nav-tab" data-section="backup" data-lang-mr="बॅकअप" data-lang-en="Backup">बॅकअप</button>
-        </div>
-
-        <!-- DASHBOARD -->
-        <div id="dashboard" class="content-section active">
-            <div class="dashboard-grid">
-                <div class="card income">
-                    <div class="card-icon">💰</div>
-                    <div class="card-title" data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</div>
-                    <div class="card-value" id="totalIncome">₹0</div>
-                </div>
-                <div class="card expense">
-                    <div class="card-icon">💸</div>
-                    <div class="card-title" data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</div>
-                    <div class="card-value" id="totalExpense">₹0</div>
-                </div>
-                <div class="card balance">
-                    <div class="card-icon">📊</div>
-                    <div class="card-title" data-lang-mr="शिल्लक" data-lang-en="Balance">शिल्लक</div>
-                    <div class="card-value" id="totalBalance">₹0</div>
-                </div>
-                <div class="card sites">
-                    <div class="card-icon">🏢</div>
-                    <div class="card-title" data-lang-mr="एकूण साइट्स" data-lang-en="Total Sites">एकूण साइट्स</div>
-                    <div class="card-value" id="totalSites">0</div>
-                </div>
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="content-section active">
+        <div class="dashboard-grid">
+            <div class="card income">
+                <div class="card-icon">💰</div>
+                <div class="card-title" data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</div>
+                <div class="card-value" id="totalIncome">₹0</div>
             </div>
-            <div class="section-card">
-                <h3 class="section-title" data-lang-mr="अलीकडील व्यवहार" data-lang-en="Recent Transactions">अलीकडील व्यवहार</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
-                                <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
-                                <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
-                                <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                                <th class="admin-only" data-lang-mr="जोडले" data-lang-en="Added By">जोडले</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentTransactions"></tbody>
-                    </table>
-                </div>
+            <div class="card expense">
+                <div class="card-icon">💸</div>
+                <div class="card-title" data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</div>
+                <div class="card-value" id="totalExpense">₹0</div>
+            </div>
+            <div class="card balance">
+                <div class="card-icon">📊</div>
+                <div class="card-title" data-lang-mr="शिल्लक" data-lang-en="Balance">शिल्लक</div>
+                <div class="card-value" id="totalBalance">₹0</div>
+            </div>
+            <div class="card sites">
+                <div class="card-icon">🏢</div>
+                <div class="card-title" data-lang-mr="एकूण साइट्स" data-lang-en="Total Sites">एकूण साइट्स</div>
+                <div class="card-value" id="totalSites">0</div>
             </div>
         </div>
-
-        <!-- TRANSACTIONS -->
-        <div id="transactions" class="content-section">
-            <div class="section-card">
-                <div class="section-header">
-                    <h3 class="section-title" data-lang-mr="सर्व व्यवहार" data-lang-en="All Transactions">सर्व व्यवहार</h3>
-                    <button class="btn btn-primary" id="addTransactionBtn" data-lang-mr="+ नवीन" data-lang-en="+ Add New">+ नवीन</button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
-                                <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
-                                <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
-                                <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                                <th data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</th>
-                                <th data-lang-mr="नोंद" data-lang-en="Note">नोंद</th>
-                                <th class="admin-only" data-lang-mr="जोडले" data-lang-en="Added By">जोडले</th>
-                                <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allTransactions"></tbody>
-                    </table>
-                </div>
+        <div class="section-card">
+            <h3 class="section-title" data-lang-mr="अलीकडील व्यवहार" data-lang-en="Recent Transactions">अलीकडील व्यवहार</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
+                            <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
+                            <th data-lang-mr="वर्णन" data-lang-en="Description">वर्णन</th>
+                            <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
+                            <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentTransactions"></tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <!-- SITES (Admin Only) -->
-        <div id="sites" class="content-section">
-            <div class="section-card">
-                <div class="section-header">
-                    <h3 class="section-title" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</h3>
-                    <button class="btn btn-primary" id="addSiteBtn" data-lang-mr="+ नवीन साइट" data-lang-en="+ Add Site">+ नवीन साइट</button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</th>
-                                <th data-lang-mr="स्थान" data-lang-en="Location">स्थान</th>
-                                <th data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</th>
-                                <th data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</th>
-                                <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sitesList"></tbody>
-                    </table>
-                </div>
+    <!-- TRANSACTIONS -->
+    <div id="transactions" class="content-section">
+        <div class="section-card">
+            <div class="section-header">
+                <h3 class="section-title" data-lang-mr="सर्व व्यवहार" data-lang-en="All Transactions">सर्व व्यवहार</h3>
+                <button class="btn btn-primary" id="addTransactionBtn" data-lang-mr="+ नवीन" data-lang-en="+ Add New">+ नवीन</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
+                            <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
+                            <th data-lang-mr="वर्णन" data-lang-en="Description">वर्णन</th>
+                            <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
+                            <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                            <th data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</th>
+                            <th data-lang-mr="नोंद" data-lang-en="Note">नोंद</th>
+                            <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allTransactions"></tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <!-- STAFF (Admin Only) -->
-        <div id="staff" class="content-section">
-            <div class="section-card">
-                <div class="section-header">
-                    <h3 class="section-title" data-lang-mr="कर्मचारी व्यवस्थापन" data-lang-en="Staff Management">कर्मचारी व्यवस्थापन</h3>
-                    <button class="btn btn-primary" id="addStaffBtn" data-lang-mr="+ नवीन कर्मचारी" data-lang-en="+ Add Staff">+ नवीन कर्मचारी</button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-lang-mr="नाव" data-lang-en="Name">नाव</th>
-                                <th data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</th>
-                                <th data-lang-mr="भूमिका" data-lang-en="Role">भूमिका</th>
-                                <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
-                            </tr>
-                        </thead>
-                        <tbody id="staffList"></tbody>
-                    </table>
-                </div>
+    <!-- SITES -->
+    <div id="sites" class="content-section">
+        <div class="section-card">
+            <div class="section-header">
+                <h3 class="section-title" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</h3>
+                <button class="btn btn-primary" id="addSiteBtn" data-lang-mr="+ नवीन साइट" data-lang-en="+ Add Site">+ नवीन साइट</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</th>
+                            <th data-lang-mr="स्थान" data-lang-en="Location">स्थान</th>
+                            <th data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</th>
+                            <th data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</th>
+                            <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sitesList"></tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <!-- PENDING (Admin Only) -->
-        <div id="pending" class="content-section">
-            <div class="section-card">
-                <div class="info-box" data-lang-mr="ℹ️ कर्मचार्‍यांनी पाठवलेले व्यवहार इथे दिसतील. तुम्ही ते मंजूर किंवा नाकारू शकता." data-lang-en="ℹ️ Transactions sent by staff will appear here. You can approve or reject them.">ℹ️ कर्मचार्‍यांनी पाठवलेले व्यवहार इथे दिसतील. तुम्ही ते मंजूर किंवा नाकारू शकता.</div>
-                <h3 class="section-title" data-lang-mr="प्रलंबित व्यवहार" data-lang-en="Pending Transactions">प्रलंबित व्यवहार</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
-                                <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
-                                <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
-                                <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                                <th data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</th>
-                                <th data-lang-mr="नोंद" data-lang-en="Note">नोंद</th>
-                                <th data-lang-mr="पाठवले" data-lang-en="Sent By">पाठवले</th>
-                                <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pendingList"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- REPORTS -->
-        <div id="reports" class="content-section">
-            <div class="section-card">
+    <!-- REPORTS -->
+    <div id="reports" class="content-section">
+        <div class="section-card">
+            <div class="section-header">
                 <h3 class="section-title" data-lang-mr="साइट-निहाय अहवाल" data-lang-en="Site-wise Report">साइट-निहाय अहवाल</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                                <th data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</th>
-                                <th data-lang-mr="खर्च" data-lang-en="Expense">खर्च</th>
-                                <th data-lang-mr="नफा/तोटा" data-lang-en="Profit/Loss">नफा/तोटा</th>
-                            </tr>
-                        </thead>
-                        <tbody id="siteReports"></tbody>
-                    </table>
-                </div>
+                <button class="btn btn-success" onclick="window.print()" data-lang-mr="🖨️ प्रिंट करा" data-lang-en="🖨️ Print">🖨️ प्रिंट करा</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                            <th data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</th>
+                            <th data-lang-mr="खर्च" data-lang-en="Expense">खर्च</th>
+                            <th data-lang-mr="नफा/तोटा" data-lang-en="Profit/Loss">नफा/तोटा</th>
+                        </tr>
+                    </thead>
+                    <tbody id="siteReports"></tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <!-- BACKUP -->
-        <div id="backup" class="content-section">
-            <div class="backup-section">
-                <div class="backup-card">
-                    <div class="backup-card-icon">💾</div>
-                    <div class="backup-card-title" data-lang-mr="डेटा बॅकअप" data-lang-en="Backup Data">डेटा बॅकअप</div>
-                    <div class="backup-card-desc" data-lang-mr="तुमचा सर्व डेटा JSON फाइलमध्ये डाउनलोड करा. ही फाइल Admin ला पाठवा." data-lang-en="Download all your data as JSON file. Send this file to Admin.">तुमचा सर्व डेटा JSON फाइलमध्ये डाउनलोड करा. ही फाइल Admin ला पाठवा.</div>
-                    <button class="btn btn-success" onclick="backupData()" data-lang-mr="📥 बॅकअप डाउनलोड" data-lang-en="📥 Download Backup">📥 बॅकअप डाउनलोड</button>
-                    <div id="backupStatus" class="status-msg"></div>
-                </div>
+    <!-- BACKUP -->
+    <div id="backup" class="content-section">
+        <div class="backup-section">
+            <div class="backup-card">
+                <div class="backup-card-icon">💾</div>
+                <div class="backup-card-title" data-lang-mr="डेटा बॅकअप" data-lang-en="Backup Data">डेटा बॅकअप</div>
+                <div class="backup-card-desc" data-lang-mr="सर्व डेटा JSON फाइलमध्ये डाउनलोड करा" data-lang-en="Download all data as JSON file">सर्व डेटा JSON फाइलमध्ये डाउनलोड करा</div>
+                <button class="btn btn-success" onclick="backupData()" data-lang-mr="📥 बॅकअप डाउनलोड" data-lang-en="📥 Download Backup">📥 बॅकअप डाउनलोड</button>
+                <div id="backupStatus" class="status-msg"></div>
+            </div>
 
-                <div class="backup-card admin-only">
-                    <div class="backup-card-icon">📂</div>
-                    <div class="backup-card-title" data-lang-mr="डेटा रिस्टोर (Admin)" data-lang-en="Restore Data (Admin)">डेटा रिस्टोर (Admin)</div>
-                    <div class="backup-card-desc" data-lang-mr="कर्मचार्‍यांकडून आलेली बॅकअप फाइल इथे जोडा" data-lang-en="Add backup file received from staff">कर्मचार्‍यांकडून आलेली बॅकअप फाइल इथे जोडा</div>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="restoreFile" accept=".json" onchange="handleFileSelect(event)">
-                        <label for="restoreFile" class="file-input-label" data-lang-mr="📁 फाइल निवडा (JSON)" data-lang-en="📁 Select File (JSON)">📁 फाइल निवडा (JSON)</label>
-                    </div>
-                    <div id="fileName" class="file-name"></div>
-                    <div id="restoreOptions" class="restore-options">
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio" name="restoreMode" value="merge" checked>
-                                <div>
-                                    <strong data-lang-mr="➕ अस्तित्वात असलेल्या डेटामध्ये जोडा" data-lang-en="➕ Add to existing data">➕ अस्तित्वात असलेल्या डेटामध्ये जोडा</strong>
-                                    <small data-lang-mr="जुना डेटा ठेवा, नवीन जोडा (डुप्लिकेट्स वगळा)" data-lang-en="Keep old data, add new (skip duplicates)">जुना डेटा ठेवा, नवीन जोडा (डुप्लिकेट्स वगळा)</small>
-                                </div>
-                            </label>
-                            <label>
-                                <input type="radio" name="restoreMode" value="overwrite">
-                                <div>
-                                    <strong data-lang-mr="🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)" data-lang-en="🔄 Overwrite (Delete all old data)">🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)</strong>
-                                    <small data-lang-mr="सर्व जुना डेटा हटवून नवीन डेटा टाका" data-lang-en="Delete all old data and add new data">सर्व जुना डेटा हटवून नवीन डेटा टाका</small>
-                                </div>
-                            </label>
-                        </div>
-                        <button class="btn btn-warning btn-block" onclick="restoreData()" style="margin-top: 10px;" data-lang-mr="🚀 रिस्टोर करा" data-lang-en="🚀 Restore">🚀 रिस्टोर करा</button>
-                    </div>
-                    <div id="restoreStatus" class="status-msg"></div>
+            <div class="backup-card">
+                <div class="backup-card-icon">📂</div>
+                <div class="backup-card-title" data-lang-mr="डेटा रिस्टोर" data-lang-en="Restore Data">डेटा रिस्टोर</div>
+                <div class="backup-card-desc" data-lang-mr="बॅकअप फाइलमधून डेटा परत आणा" data-lang-en="Restore data from backup file">बॅकअप फाइलमधून डेटा परत आणा</div>
+                <div class="file-input-wrapper">
+                    <input type="file" id="restoreFile" accept=".json" onchange="handleFileSelect(event)">
+                    <label for="restoreFile" class="file-input-label" data-lang-mr="📁 फाइल निवडा (JSON)" data-lang-en="📁 Select File (JSON)">📁 फाइल निवडा (JSON)</label>
                 </div>
+                <div id="fileName" class="file-name"></div>
+                <div id="restoreOptions" class="restore-options">
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="restoreMode" value="merge" checked>
+                            <div>
+                                <strong data-lang-mr="➕ अस्तित्वात असलेल्या डेटामध्ये जोडा" data-lang-en="➕ Add to existing data">➕ अस्तित्वात असलेल्या डेटामध्ये जोडा</strong>
+                                <small data-lang-mr="जुना डेटा ठेवा, नवीन जोडा (डुप्लिकेट्स वगळा)" data-lang-en="Keep old data, add new (skip duplicates)">जुना डेटा ठेवा, नवीन जोडा (डुप्लिकेट्स वगळा)</small>
+                            </div>
+                        </label>
+                        <label>
+                            <input type="radio" name="restoreMode" value="overwrite">
+                            <div>
+                                <strong data-lang-mr="🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)" data-lang-en="🔄 Overwrite (Delete all old data)">🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)</strong>
+                                <small data-lang-mr="सर्व जुना डेटा हटवून नवीन डेटा टाका" data-lang-en="Delete all old data and add new data">सर्व जुना डेटा हटवून नवीन डेटा टाका</small>
+                            </div>
+                        </label>
+                    </div>
+                    <button class="btn btn-warning btn-block" onclick="restoreData()" style="margin-top: 10px;" data-lang-mr="🚀 रिस्टोर करा" data-lang-en="🚀 Restore">🚀 रिस्टोर करा</button>
+                </div>
+                <div id="restoreStatus" class="status-msg"></div>
             </div>
         </div>
     </div>
@@ -584,10 +484,11 @@ tr:hover { background: #f7fafc; }
 <div id="transactionModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title" data-lang-mr="नवीन व्यवहार" data-lang-en="New Transaction">नवीन व्यवहार</h3>
+            <h3 class="modal-title" id="transModalTitle" data-lang-mr="नवीन व्यवहार" data-lang-en="New Transaction">नवीन व्यवहार</h3>
             <button class="close-btn" onclick="closeModal('transactionModal')">&times;</button>
         </div>
         <form id="transactionForm">
+            <input type="hidden" id="transEditId">
             <div class="form-group">
                 <label data-lang-mr="तारीख" data-lang-en="Date">तारीख</label>
                 <input type="date" id="transDate" required>
@@ -598,6 +499,10 @@ tr:hover { background: #f7fafc; }
                     <option value="income" data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</option>
                     <option value="expense" data-lang-mr="खर्च" data-lang-en="Expense">खर्च</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label data-lang-mr="वर्णन (काय खरेदी केले/पैसे का मिळाले)" data-lang-en="Description (What was purchased/received)">वर्णन (काय खरेदी केले/पैसे का मिळाले)</label>
+                <input type="text" id="transDescription" required placeholder="उदा. सिमेंट, सरिया, मजुरी बिल">
             </div>
             <div class="form-group">
                 <label data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</label>
@@ -620,8 +525,7 @@ tr:hover { background: #f7fafc; }
                 <label data-lang-mr="नोंद" data-lang-en="Note">नोंद</label>
                 <textarea id="transNote" rows="3"></textarea>
             </div>
-            <div id="staffNotice" class="info-box" style="display:none;" data-lang-mr="ℹ️ तुम्ही कर्मचारी आहात. तुमचा व्यवहार Admin ला मंजुरीसाठी पाठवला जाईल." data-lang-en="ℹ️ You are staff. Your transaction will be sent to Admin for approval.">ℹ️ तुम्ही कर्मचारी आहात. तुमचा व्यवहार Admin ला मंजुरीसाठी पाठवला जाईल.</div>
-            <button type="submit" class="btn btn-primary btn-block" id="transSubmitBtn" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
+            <button type="submit" class="btn btn-primary btn-block" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
         </form>
     </div>
 </div>
@@ -647,94 +551,49 @@ tr:hover { background: #f7fafc; }
     </div>
 </div>
 
-<!-- STAFF MODAL -->
-<div id="staffModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title" data-lang-mr="नवीन कर्मचारी" data-lang-en="New Staff">नवीन कर्मचारी</h3>
-            <button class="close-btn" onclick="closeModal('staffModal')">&times;</button>
-        </div>
-        <form id="staffForm">
-            <div class="form-group">
-                <label data-lang-mr="नाव" data-lang-en="Name">नाव</label>
-                <input type="text" id="staffName" required>
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</label>
-                <input type="text" id="staffUsername" required>
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="पासवर्ड" data-lang-en="Password">पासवर्ड</label>
-                <input type="password" id="staffPassword" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
-        </form>
-    </div>
-</div>
-
 <script>
-// ============ HARDCODED ADMINS ============
-const ADMIN_USERS = [
-    { username: 'lucky', password: '1196', role: 'admin', name: 'Lucky' },
-    { username: 'jitesh', password: '2000', role: 'admin', name: 'Jitesh' }
-];
-
-// ============ STATE ============
-let currentUser = null;
 let currentLang = 'mr';
 let selectedBackupFile = null;
 
-// ============ TRANSLATIONS ============
 const T = {
     mr: {
-        welcome: 'स्वागत',
         income: 'उत्पन्न', expense: 'खर्च',
-        staff: 'कर्मचारी', admin: 'प्रशासक',
-        delete: 'हटवा', approve: 'मंजूर', reject: 'नाकार',
-        loginError: 'चुकीचा युजरनेम किंवा पासवर्ड',
         noData: 'अजून डेटा नाही',
         siteAdded: '✅ साइट जोडली',
         transactionAdded: '✅ व्यवहार जोडला',
-        transactionSent: '✅ व्यवहार Admin ला पाठवला',
-        staffAdded: '✅ कर्मचारी जोडला',
-        staffDeleted: '✅ कर्मचारी हटवला',
+        transactionUpdated: '✅ व्यवहार अपडेट केला',
         transDeleted: '✅ व्यवहार हटवला',
-        approved: '✅ व्यवहार मंजूर केला',
-        rejected: '✅ व्यवहार नाकारला',
         confirmDelete: 'तुम्हाला खात्री आहे का?',
         backupSuccess: '✅ बॅकअप यशस्वी!',
         restoreSuccess: '✅ रिस्टोर यशस्वी!',
         restoreError: '❌ रिस्टोरमध्ये त्रुटी',
         invalidFile: '❌ चुकीची फाइल फॉरमॅट',
         confirmOverwrite: '⚠️ सर्व जुना डेटा हटवला जाईल. खात्री आहे?',
-        pending: 'प्रलंबित'
+        editTransaction: 'व्यवहार संपादित करा',
+        newTransaction: 'नवीन व्यवहार',
+        edit: 'संपादित', delete: 'हटवा',
+        selectSite: 'साइट निवडा', addSiteFirst: 'प्रथम साइट जोडा'
     },
     en: {
-        welcome: 'Welcome',
         income: 'Income', expense: 'Expense',
-        staff: 'Staff', admin: 'Admin',
-        delete: 'Delete', approve: 'Approve', reject: 'Reject',
-        loginError: 'Invalid username or password',
         noData: 'No data yet',
         siteAdded: '✅ Site added',
         transactionAdded: '✅ Transaction added',
-        transactionSent: '✅ Transaction sent to Admin',
-        staffAdded: '✅ Staff added',
-        staffDeleted: '✅ Staff deleted',
+        transactionUpdated: '✅ Transaction updated',
         transDeleted: '✅ Transaction deleted',
-        approved: '✅ Transaction approved',
-        rejected: '✅ Transaction rejected',
         confirmDelete: 'Are you sure?',
         backupSuccess: '✅ Backup successful!',
         restoreSuccess: '✅ Restore successful!',
         restoreError: '❌ Restore error',
         invalidFile: '❌ Invalid file format',
         confirmOverwrite: '⚠️ All old data will be deleted. Are you sure?',
-        pending: 'Pending'
+        editTransaction: 'Edit Transaction',
+        newTransaction: 'New Transaction',
+        edit: 'Edit', delete: 'Delete',
+        selectSite: 'Select site', addSiteFirst: 'Add site first'
     }
 };
 
-// ============ STORAGE ============
 const Storage = {
     get: (key) => JSON.parse(localStorage.getItem('ck_' + key) || '[]'),
     set: (key, data) => localStorage.setItem('ck_' + key, JSON.stringify(data)),
@@ -756,101 +615,33 @@ const Storage = {
     clear: (key) => localStorage.removeItem('ck_' + key)
 };
 
-// ============ INIT ============
 document.addEventListener('DOMContentLoaded', () => {
-    const saved = localStorage.getItem('ck_currentUser');
-    if (saved) {
-        currentUser = JSON.parse(saved);
-        showMainApp();
-    }
     setupEventListeners();
     document.getElementById('transDate').valueAsDate = new Date();
+    loadDashboard();
 });
 
 function setupEventListeners() {
-    document.getElementById('loginForm').addEventListener('submit', handleLogin);
-    document.getElementById('loginLangToggle').addEventListener('click', toggleLanguage);
     document.getElementById('langToggle').addEventListener('click', toggleLanguage);
-    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
     document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.addEventListener('click', () => switchSection(tab.dataset.section));
     });
     document.getElementById('addTransactionBtn').addEventListener('click', () => {
+        document.getElementById('transEditId').value = '';
+        document.getElementById('transModalTitle').textContent = T[currentLang].newTransaction;
+        document.getElementById('transactionForm').reset();
+        document.getElementById('transDate').valueAsDate = new Date();
         loadSitesForDropdown();
         openModal('transactionModal');
     });
     document.getElementById('addSiteBtn').addEventListener('click', () => openModal('siteModal'));
-    document.getElementById('addStaffBtn').addEventListener('click', () => openModal('staffModal'));
     document.getElementById('transactionForm').addEventListener('submit', handleTransactionSubmit);
     document.getElementById('siteForm').addEventListener('submit', handleSiteSubmit);
-    document.getElementById('staffForm').addEventListener('submit', handleStaffSubmit);
 }
 
-// ============ LOGIN ============
-function handleLogin(e) {
-    e.preventDefault();
-    const username = document.getElementById('loginUsername').value.trim().toLowerCase();
-    const password = document.getElementById('loginPassword').value;
-    const errorDiv = document.getElementById('loginError');
-
-    // Check hardcoded admins
-    const admin = ADMIN_USERS.find(u => u.username === username && u.password === password);
-    if (admin) {
-        currentUser = { ...admin };
-        localStorage.setItem('ck_currentUser', JSON.stringify(currentUser));
-        showMainApp();
-        return;
-    }
-
-    // Check staff from storage
-    const staffList = Storage.get('staff');
-    const staff = staffList.find(s => s.username === username && s.password === password);
-    if (staff) {
-        currentUser = { ...staff, role: 'staff' };
-        localStorage.setItem('ck_currentUser', JSON.stringify(currentUser));
-        showMainApp();
-        return;
-    }
-
-    errorDiv.textContent = T[currentLang].loginError;
-    errorDiv.classList.add('show');
-    setTimeout(() => errorDiv.classList.remove('show'), 3000);
-}
-
-function handleLogout() {
-    localStorage.removeItem('ck_currentUser');
-    currentUser = null;
-    document.getElementById('mainApp').classList.remove('active');
-    document.getElementById('loginScreen').classList.add('active');
-    document.getElementById('loginForm').reset();
-}
-
-function showMainApp() {
-    document.getElementById('loginScreen').classList.remove('active');
-    document.getElementById('mainApp').classList.add('active');
-    document.getElementById('welcomeMsg').textContent = `${T[currentLang].welcome}, ${currentUser.name}! (${currentUser.role === 'admin' ? T[currentLang].admin : T[currentLang].staff})`;
-
-    // Role-based visibility
-    const isAdmin = currentUser.role === 'admin';
-    document.querySelectorAll('.admin-only').forEach(el => {
-        el.style.display = isAdmin ? '' : 'none';
-    });
-
-    // Staff notice in transaction form
-    document.getElementById('staffNotice').style.display = isAdmin ? 'none' : 'block';
-    const submitBtn = document.getElementById('transSubmitBtn');
-    submitBtn.textContent = isAdmin
-        ? (currentLang === 'mr' ? 'जतन करा' : 'Save')
-        : (currentLang === 'mr' ? 'Admin ला पाठवा' : 'Send to Admin');
-
-    loadDashboard();
-}
-
-// ============ LANGUAGE ============
 function toggleLanguage() {
     currentLang = currentLang === 'mr' ? 'en' : 'mr';
     document.getElementById('langToggle').textContent = currentLang === 'mr' ? 'EN' : 'मराठी';
-    document.getElementById('loginLangToggle').textContent = currentLang === 'mr' ? 'EN' : 'मराठी';
     document.querySelectorAll('[data-lang-mr]').forEach(el => {
         const val = el.dataset['lang' + currentLang.charAt(0).toUpperCase() + currentLang.slice(1)];
         if (val) {
@@ -859,37 +650,23 @@ function toggleLanguage() {
             else el.textContent = val;
         }
     });
-    if (currentUser) showMainApp();
+    loadDashboard();
 }
 
-// ============ NAVIGATION ============
 function switchSection(sectionId) {
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-    const tab = document.querySelector(`[data-section="${sectionId}"]`);
-    if (tab) tab.classList.add('active');
-    const section = document.getElementById(sectionId);
-    if (section) section.classList.add('active');
+    document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+    document.getElementById(sectionId).classList.add('active');
 
     if (sectionId === 'dashboard') loadDashboard();
     else if (sectionId === 'transactions') loadTransactions();
     else if (sectionId === 'sites') loadSites();
-    else if (sectionId === 'staff') loadStaff();
-    else if (sectionId === 'pending') loadPending();
     else if (sectionId === 'reports') loadReports();
 }
 
-// ============ DATA HELPERS ============
-function getVisibleTransactions() {
-    const all = Storage.get('transactions');
-    if (currentUser.role === 'admin') return all;
-    // Staff: only their own approved transactions
-    return all.filter(t => t.added_by === currentUser.username && t.status !== 'pending');
-}
-
-// ============ LOAD FUNCTIONS ============
 function loadDashboard() {
-    const transactions = getVisibleTransactions();
+    const transactions = Storage.get('transactions');
     let totalIncome = 0, totalExpense = 0;
     transactions.forEach(t => {
         const amt = parseFloat(t.amount) || 0;
@@ -903,41 +680,42 @@ function loadDashboard() {
 
     const recent = transactions.slice(-5).reverse();
     const tbody = document.getElementById('recentTransactions');
-    const isAdmin = currentUser.role === 'admin';
     tbody.innerHTML = recent.length ? recent.map(t => `
         <tr>
             <td>${t.date}</td>
             <td><span class="badge badge-${t.type}">${T[currentLang][t.type]}</span></td>
+            <td>${t.description || '-'}</td>
             <td>₹${parseFloat(t.amount).toLocaleString('en-IN')}</td>
             <td>${t.site_name || '-'}</td>
-            ${isAdmin ? `<td>${t.added_by || '-'}</td>` : ''}
         </tr>
-    `).join('') : `<tr><td colspan="${isAdmin ? 5 : 4}" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
+    `).join('') : `<tr><td colspan="5" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
 }
 
 function loadTransactions() {
-    const transactions = getVisibleTransactions().slice().reverse();
+    const transactions = Storage.get('transactions').slice().reverse();
     const tbody = document.getElementById('allTransactions');
-    const isAdmin = currentUser.role === 'admin';
     tbody.innerHTML = transactions.length ? transactions.map(t => `
         <tr>
             <td>${t.date}</td>
             <td><span class="badge badge-${t.type}">${T[currentLang][t.type]}</span></td>
+            <td>${t.description || '-'}</td>
             <td>₹${parseFloat(t.amount).toLocaleString('en-IN')}</td>
             <td>${t.site_name || '-'}</td>
             <td>${t.payment_mode || '-'}</td>
             <td>${t.note || '-'}</td>
-            ${isAdmin ? `<td>${t.added_by || '-'}</td>` : ''}
             <td>
-                ${isAdmin || t.added_by === currentUser.username ? `<button class="btn btn-danger" onclick="deleteTransaction('${t.id}')">${T[currentLang].delete}</button>` : '-'}
+                <div class="action-btns">
+                    <button class="btn-edit" onclick="editTransaction('${t.id}')">${T[currentLang].edit}</button>
+                    <button class="btn-danger" onclick="deleteTransaction('${t.id}')">${T[currentLang].delete}</button>
+                </div>
             </td>
         </tr>
-    `).join('') : `<tr><td colspan="${isAdmin ? 8 : 7}" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
+    `).join('') : `<tr><td colspan="8" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
 }
 
 function loadSites() {
     const sites = Storage.get('sites');
-    const transactions = Storage.get('transactions').filter(t => t.status !== 'pending');
+    const transactions = Storage.get('transactions');
     const tbody = document.getElementById('sitesList');
     tbody.innerHTML = sites.length ? sites.map(site => {
         const siteTrans = transactions.filter(t => t.site_id == site.id);
@@ -948,49 +726,14 @@ function loadSites() {
             <td>${site.location}</td>
             <td>₹${income.toLocaleString('en-IN')}</td>
             <td>₹${expense.toLocaleString('en-IN')}</td>
-            <td><button class="btn btn-danger" onclick="deleteSite('${site.id}')">${T[currentLang].delete}</button></td>
+            <td><button class="btn-danger" onclick="deleteSite('${site.id}')">${T[currentLang].delete}</button></td>
         </tr>`;
     }).join('') : `<tr><td colspan="5" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
 }
 
-function loadStaff() {
-    const staff = Storage.get('staff');
-    const tbody = document.getElementById('staffList');
-    tbody.innerHTML = staff.length ? staff.map(s => `
-        <tr>
-            <td>${s.name}</td>
-            <td>${s.username}</td>
-            <td><span class="badge badge-staff">${T[currentLang].staff}</span></td>
-            <td><button class="btn btn-danger" onclick="deleteStaff('${s.id}')">${T[currentLang].delete}</button></td>
-        </tr>
-    `).join('') : `<tr><td colspan="4" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
-}
-
-function loadPending() {
-    const pending = Storage.get('transactions').filter(t => t.status === 'pending').reverse();
-    const tbody = document.getElementById('pendingList');
-    tbody.innerHTML = pending.length ? pending.map(t => `
-        <tr>
-            <td>${t.date}</td>
-            <td><span class="badge badge-${t.type}">${T[currentLang][t.type]}</span></td>
-            <td>₹${parseFloat(t.amount).toLocaleString('en-IN')}</td>
-            <td>${t.site_name || '-'}</td>
-            <td>${t.payment_mode || '-'}</td>
-            <td>${t.note || '-'}</td>
-            <td>${t.added_by || '-'}</td>
-            <td>
-                <div class="action-btns">
-                    <button class="btn-sm btn-approve" onclick="approveTransaction('${t.id}')">${T[currentLang].approve}</button>
-                    <button class="btn-sm btn-reject" onclick="rejectTransaction('${t.id}')">${T[currentLang].reject}</button>
-                </div>
-            </td>
-        </tr>
-    `).join('') : `<tr><td colspan="8" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
-}
-
 function loadReports() {
     const sites = Storage.get('sites');
-    const transactions = Storage.get('transactions').filter(t => t.status !== 'pending');
+    const transactions = Storage.get('transactions');
     const tbody = document.getElementById('siteReports');
     tbody.innerHTML = sites.length ? sites.map(site => {
         const siteTrans = transactions.filter(t => t.site_id == site.id);
@@ -1011,44 +754,62 @@ function loadSitesForDropdown() {
     const select = document.getElementById('transSite');
     select.innerHTML = sites.length
         ? sites.map(s => `<option value="${s.id}">${s.name}</option>`).join('')
-        : '<option value="" disabled>' + (currentLang === 'mr' ? 'प्रथम साइट जोडा' : 'Add site first') + '</option>';
+        : `<option value="" disabled>${T[currentLang].addSiteFirst}</option>`;
 }
 
-// ============ FORM HANDLERS ============
 function handleTransactionSubmit(e) {
     e.preventDefault();
+    const editId = document.getElementById('transEditId').value;
     const siteId = document.getElementById('transSite').value;
     const sites = Storage.get('sites');
     const site = sites.find(s => s.id == siteId);
-    if (!site) { alert(currentLang === 'mr' ? 'साइट निवडा' : 'Select site'); return; }
+    if (!site) { alert(T[currentLang].selectSite); return; }
 
     const trans = {
         date: document.getElementById('transDate').value,
         type: document.getElementById('transType').value,
+        description: document.getElementById('transDescription').value,
         amount: document.getElementById('transAmount').value,
         site_id: siteId,
         site_name: site.name,
         payment_mode: document.getElementById('transPaymentMode').value,
         note: document.getElementById('transNote').value,
-        added_by: currentUser.username,
-        added_by_name: currentUser.name,
-        created_at: new Date().toISOString()
+        updated_at: new Date().toISOString()
     };
 
-    if (currentUser.role === 'admin') {
-        trans.status = 'approved';
+    if (editId) {
+        Storage.update('transactions', editId, trans);
+        alert(T[currentLang].transactionUpdated);
+    } else {
+        trans.created_at = new Date().toISOString();
         Storage.add('transactions', trans);
         alert(T[currentLang].transactionAdded);
-    } else {
-        trans.status = 'pending';
-        Storage.add('transactions', trans);
-        alert(T[currentLang].transactionSent);
     }
 
     closeModal('transactionModal');
     document.getElementById('transactionForm').reset();
     document.getElementById('transDate').valueAsDate = new Date();
     loadDashboard();
+    loadTransactions();
+}
+
+function editTransaction(id) {
+    const transactions = Storage.get('transactions');
+    const trans = transactions.find(t => t.id === id);
+    if (!trans) return;
+
+    loadSitesForDropdown();
+    document.getElementById('transEditId').value = trans.id;
+    document.getElementById('transModalTitle').textContent = T[currentLang].editTransaction;
+    document.getElementById('transDate').value = trans.date;
+    document.getElementById('transType').value = trans.type;
+    document.getElementById('transDescription').value = trans.description || '';
+    document.getElementById('transAmount').value = trans.amount;
+    document.getElementById('transSite').value = trans.site_id;
+    document.getElementById('transPaymentMode').value = trans.payment_mode;
+    document.getElementById('transNote').value = trans.note || '';
+
+    openModal('transactionModal');
 }
 
 function handleSiteSubmit(e) {
@@ -1063,27 +824,6 @@ function handleSiteSubmit(e) {
     alert(T[currentLang].siteAdded);
 }
 
-function handleStaffSubmit(e) {
-    e.preventDefault();
-    const username = document.getElementById('staffUsername').value.trim().toLowerCase();
-    const existing = Storage.get('staff');
-    if (existing.some(s => s.username === username) || ADMIN_USERS.some(a => a.username === username)) {
-        alert(currentLang === 'mr' ? 'हा युजरनेम आधीच वापरात आहे' : 'Username already exists');
-        return;
-    }
-    Storage.add('staff', {
-        name: document.getElementById('staffName').value,
-        username: username,
-        password: document.getElementById('staffPassword').value,
-        role: 'staff'
-    });
-    closeModal('staffModal');
-    document.getElementById('staffForm').reset();
-    loadStaff();
-    alert(T[currentLang].staffAdded);
-}
-
-// ============ ACTIONS ============
 function deleteTransaction(id) {
     if (!confirm(T[currentLang].confirmDelete)) return;
     Storage.delete('transactions', id);
@@ -1099,46 +839,20 @@ function deleteSite(id) {
     loadDashboard();
 }
 
-function deleteStaff(id) {
-    if (!confirm(T[currentLang].confirmDelete)) return;
-    Storage.delete('staff', id);
-    loadStaff();
-    alert(T[currentLang].staffDeleted);
-}
-
-function approveTransaction(id) {
-    Storage.update('transactions', id, { status: 'approved', approved_at: new Date().toISOString() });
-    loadPending();
-    loadDashboard();
-    alert(T[currentLang].approved);
-}
-
-function rejectTransaction(id) {
-    if (!confirm(T[currentLang].confirmDelete)) return;
-    Storage.delete('transactions', id);
-    loadPending();
-    alert(T[currentLang].rejected);
-}
-
-// ============ MODAL ============
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-// ============ BACKUP ============
 function backupData() {
     const statusEl = document.getElementById('backupStatus');
     try {
         const sites = Storage.get('sites');
         const transactions = Storage.get('transactions');
-        const staff = Storage.get('staff');
 
         const backup = {
-            version: '2.0',
+            version: '3.0',
             backupDate: new Date().toISOString(),
-            backupBy: currentUser.username,
-            backupByName: currentUser.name,
             app: 'Construction Accounting',
-            data: { sites, transactions, staff }
+            data: { sites, transactions }
         };
 
         const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
@@ -1146,7 +860,7 @@ function backupData() {
         const a = document.createElement('a');
         const dateStr = new Date().toISOString().split('T')[0];
         a.href = url;
-        a.download = `backup-${currentUser.username}-${dateStr}.json`;
+        a.download = `backup-${dateStr}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1183,11 +897,7 @@ function handleFileSelect(event) {
             const counts = [];
             if (data.data.sites) counts.push(`${data.data.sites.length} sites`);
             if (data.data.transactions) counts.push(`${data.data.transactions.length} transactions`);
-            if (data.data.staff) counts.push(`${data.data.staff.length} staff`);
             fileNameEl.textContent = `✅ ${file.name} (${counts.join(', ')})`;
-            if (data.backupByName) {
-                fileNameEl.textContent += ` - by ${data.backupByName}`;
-            }
             optionsEl.classList.add('show');
         } catch (err) {
             selectedBackupFile = null;
@@ -1214,21 +924,17 @@ function restoreData() {
         statusEl.textContent = currentLang === 'mr' ? '⏳ रिस्टोर करत आहे...' : '⏳ Restoring...';
 
         const backup = selectedBackupFile.data;
-        let sitesAdded = 0, transAdded = 0, staffAdded = 0;
+        let sitesAdded = 0, transAdded = 0;
 
         if (mode === 'overwrite') {
             Storage.clear('transactions');
             Storage.clear('sites');
-            Storage.clear('staff');
 
             (backup.sites || []).forEach(s => { const { id, ...rest } = s; Storage.add('sites', rest); sitesAdded++; });
             (backup.transactions || []).forEach(t => { const { id, ...rest } = t; Storage.add('transactions', rest); transAdded++; });
-            (backup.staff || []).forEach(s => { const { id, ...rest } = s; Storage.add('staff', rest); staffAdded++; });
         } else {
-            // Merge - skip duplicates
             const existingSites = Storage.get('sites');
             const existingTrans = Storage.get('transactions');
-            const existingStaff = Storage.get('staff');
 
             (backup.sites || []).forEach(site => {
                 const exists = existingSites.some(s => s.name === site.name && s.location === site.location);
@@ -1241,20 +947,15 @@ function restoreData() {
                     t.amount == trans.amount &&
                     t.type === trans.type &&
                     t.site_name === trans.site_name &&
-                    t.added_by === trans.added_by &&
+                    t.description === trans.description &&
                     Math.abs(new Date(t.created_at || 0) - new Date(trans.created_at || 0)) < 1000
                 );
                 if (!exists) { const { id, ...rest } = trans; Storage.add('transactions', rest); transAdded++; }
             });
-
-            (backup.staff || []).forEach(s => {
-                const exists = existingStaff.some(st => st.username === s.username) || ADMIN_USERS.some(a => a.username === s.username);
-                if (!exists) { const { id, ...rest } = s; Storage.add('staff', rest); staffAdded++; }
-            });
         }
 
         statusEl.className = 'status-msg success';
-        statusEl.textContent = `${T[currentLang].restoreSuccess} (+${sitesAdded} sites, +${transAdded} transactions, +${staffAdded} staff)`;
+        statusEl.textContent = `${T[currentLang].restoreSuccess} (+${sitesAdded} sites, +${transAdded} transactions)`;
 
         document.getElementById('restoreFile').value = '';
         document.getElementById('fileName').textContent = '';
