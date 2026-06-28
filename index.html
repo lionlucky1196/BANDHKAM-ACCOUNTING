@@ -4,970 +4,803 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>बांधकाम हिशोब - Construction Accounting</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
-    color: #2d3748;
+:root {
+  --primary: #2563eb;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #1f2937;
+  --border: #e5e7eb;
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
+header { background: var(--primary); color: white; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+header h1 { font-size: 1.5rem; }
+header p { font-size: 0.9rem; opacity: 0.9; }
 
-.app-container { max-width: 1200px; margin: 0 auto; padding: 20px; animation: fadeIn 0.5s; }
+nav { display: flex; overflow-x: auto; background: white; border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100; }
+nav button { flex: 1; padding: 12px 8px; border: none; background: none; cursor: pointer; font-size: 0.9rem; white-space: nowrap; border-bottom: 3px solid transparent; }
+nav button.active { border-bottom: 3px solid var(--primary); color: var(--primary); font-weight: bold; }
 
-.header {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-.header-left { display: flex; align-items: center; gap: 15px; }
-.header-logo { font-size: 40px; animation: pulse 2s infinite; }
-.header-left h2 { font-size: 22px; color: #2d3748; }
-.header-left p { color: #718096; font-size: 13px; }
-.header-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.container { padding: 15px; max-width: 1200px; margin: 0 auto; }
+.section { display: none; }
+.section.active { display: block; }
 
-.lang-toggle, .backup-btn {
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-}
-.lang-toggle { background: #edf2f7; color: #4a5568; }
-.lang-toggle:hover { background: #e2e8f0; transform: translateY(-2px); }
-.backup-btn { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; }
-.backup-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3); }
+.card { background: var(--card); padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.stat-card { background: var(--card); padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.stat-card h3 { font-size: 0.9rem; color: #6b7280; margin-bottom: 5px; }
+.stat-card p { font-size: 1.5rem; font-weight: bold; }
+.stat-card.income p { color: var(--success); }
+.stat-card.expense p { color: var(--danger); }
+.stat-card.balance p { color: var(--primary); }
 
-.nav-tabs {
-    background: white;
-    padding: 12px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-}
-.nav-tab {
-    padding: 10px 18px;
-    border: none;
-    background: #f7fafc;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: all 0.3s;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    color: #4a5568;
-}
-.nav-tab:hover { background: #edf2f7; }
-.nav-tab.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+th { background: #f9fafb; font-weight: 600; }
+tr:hover { background: #f9fafb; }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 18px;
-    margin-bottom: 25px;
-}
-.card {
-    background: white;
-    padding: 22px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    transition: all 0.3s;
-}
-.card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.card-icon { font-size: 36px; margin-bottom: 12px; }
-.card-title { font-size: 13px; color: #718096; margin-bottom: 6px; }
-.card-value { font-size: 26px; font-weight: 700; color: #2d3748; }
-.card.income { border-left: 4px solid #48bb78; }
-.card.expense { border-left: 4px solid #f56565; }
-.card.balance { border-left: 4px solid #4299e1; }
-.card.sites { border-left: 4px solid #ed8936; }
+.btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: 0.2s; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-secondary { background: #6b7280; color: white; }
+.btn:hover { opacity: 0.9; }
 
-.content-section { display: none; }
-.content-section.active { display: block; animation: fadeIn 0.4s; }
-.section-card {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-}
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.section-title { font-size: 18px; font-weight: 600; color: #2d3748; }
-.table-container { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
-th { background: #f7fafc; font-weight: 600; color: #4a5568; }
-tr:hover { background: #f7fafc; }
-.badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-block; }
-.badge-income { background: #c6f6d5; color: #22543d; }
-.badge-expense { background: #fed7d7; color: #742a2a; }
+.btn-group { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
 
-.btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-}
-.btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3); }
-.btn-success { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; }
-.btn-success:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(72, 187, 120, 0.3); }
-.btn-warning { background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); color: white; }
-.btn-warning:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(237, 137, 54, 0.3); }
-.btn-danger { background: #fc8181; color: white; padding: 6px 14px; font-size: 13px; }
-.btn-danger:hover { background: #f56565; }
-.btn-edit { background: #4299e1; color: white; padding: 6px 14px; font-size: 13px; }
-.btn-edit:hover { background: #3182ce; }
-.btn-block { width: 100%; }
+/* Modal */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+.modal.active { display: flex; }
+.modal-content { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+.modal-header h2 { font-size: 1.2rem; }
+.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
 
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    animation: fadeIn 0.3s;
-}
-.modal.active { display: flex; align-items: center; justify-content: center; }
-.modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: slideIn 0.3s;
-}
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-.modal-title { font-size: 18px; font-weight: 600; }
-.close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #718096; line-height: 1; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; font-size: 0.9rem; }
+.form-group textarea { resize: vertical; min-height: 80px; }
 
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #4a5568; font-size: 14px; }
-.form-group input, .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 15px;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-    background: white;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
+.radio-group { display: flex; gap: 15px; flex-wrap: wrap; }
+.radio-group label { display: flex; align-items: center; gap: 5px; font-weight: normal; }
 
-.backup-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-}
-.backup-card {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    text-align: center;
-    transition: all 0.3s;
-}
-.backup-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.backup-card-icon { font-size: 50px; margin-bottom: 12px; }
-.backup-card-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: #2d3748; }
-.backup-card-desc { color: #718096; font-size: 13px; margin-bottom: 18px; min-height: 36px; }
+.diary-entry { border-left: 4px solid var(--primary); padding: 10px 15px; margin-bottom: 15px; background: #f9fafb; border-radius: 0 5px 5px 0; }
+.diary-entry h4 { margin-bottom: 5px; }
+.diary-entry p { font-size: 0.9rem; color: #4b5563; }
+.diary-entry .date { font-size: 0.8rem; color: #9ca3af; }
 
-.file-input-wrapper { position: relative; width: 100%; }
-.file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
-.file-input-label {
-    display: block;
-    padding: 12px 20px;
-    background: #edf2f7;
-    color: #4a5568;
-    text-align: center;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-weight: 500;
-    border: 2px dashed #cbd5e0;
-    font-size: 14px;
-}
-.file-input-label:hover { background: #e2e8f0; border-color: #667eea; }
-.file-name { margin-top: 10px; font-size: 13px; color: #48bb78; font-weight: 500; }
+.badge { padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+.badge-income { background: #dcfce7; color: #166534; }
+.badge-expense { background: #fee2e2; color: #991b1b; }
+.badge-given { background: #fef3c7; color: #92400e; }
+.badge-taken { background: #e0e7ff; color: #3730a3; }
 
-.restore-options {
-    background: #f7fafc;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    display: none;
-    text-align: left;
+@media (max-width: 600px) {
+  table { font-size: 0.8rem; }
+  th, td { padding: 8px 5px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
-.restore-options.show { display: block; animation: fadeIn 0.3s; }
-.radio-group label {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.2s;
-    margin-bottom: 5px;
-}
-.radio-group label:hover { background: #edf2f7; }
-.radio-group input[type="radio"] { margin-top: 3px; }
-.radio-group strong { font-size: 14px; color: #2d3748; }
-.radio-group small { font-size: 12px; color: #718096; display: block; margin-top: 3px; }
-
-.status-msg {
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 15px;
-    font-size: 13px;
-    display: none;
-}
-.status-msg.success { background: #c6f6d5; color: #22543d; display: block; }
-.status-msg.error { background: #fed7d7; color: #742a2a; display: block; }
-.status-msg.info { background: #bee3f8; color: #2c5282; display: block; }
-
-.action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-
-@media (max-width: 768px) {
-    .header { flex-direction: column; align-items: flex-start; }
-    .dashboard-grid { grid-template-columns: 1fr; }
-    th, td { padding: 8px; font-size: 13px; }
-}
-
-@media print {
-    body { background: white; }
-    .header, .nav-tabs, .btn, .action-btns, .backup-btn, .lang-toggle { display: none !important; }
-    .section-card { box-shadow: none; page-break-inside: avoid; }
-    .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
-    .print-header h1 { font-size: 22px; color: #2d3748; }
-    .print-header p { color: #718096; font-size: 13px; }
-    table { page-break-inside: auto; }
-    tr { page-break-inside: avoid; page-break-after: auto; }
-}
-.print-header { display: none; }
 </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="print-header">
-        <h1>🏗️ बांधकाम हिशोब</h1>
-        <p>Construction Accounting Report</p>
-    </div>
+<header>
+  <h1>🏗️ बांधकाम हिशोब</h1>
+  <p>तुमचा बांधकाम व्यवसाय सोपा करा</p>
+</header>
 
-    <div class="header">
-        <div class="header-left">
-            <div class="header-logo">🏗️</div>
-            <div>
-                <h2 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h2>
-                <p data-lang-mr="तुमचा बांधकाम व्यवसाय सोपा करा" data-lang-en="Simplify your construction business">तुमचा बांधकाम व्यवसाय सोपा करा</p>
-            </div>
-        </div>
-        <div class="header-right">
-            <button class="lang-toggle" id="langToggle">EN</button>
-            <button class="backup-btn" onclick="switchSection('backup')" data-lang-mr="💾 बॅकअप" data-lang-en="💾 Backup">💾 बॅकअप</button>
-        </div>
-    </div>
+<nav>
+  <button class="tab-btn active" onclick="showTab('dashboard')">📊 डॅशबोर्ड</button>
+  <button class="tab-btn" onclick="showTab('transactions')">💸 व्यवहार</button>
+  <button class="tab-btn" onclick="showTab('sites')">🏢 साइट्स</button>
+  <button class="tab-btn" onclick="showTab('persons')">👤 व्यक्ती</button>
+  <button class="tab-btn" onclick="showTab('diary')">📖 डायरी</button>
+  <button class="tab-btn" onclick="showTab('reports')">📈 अहवाल</button>
+  <button class="tab-btn" onclick="showTab('backup')">💾 बॅकअप</button>
+</nav>
 
-    <div class="nav-tabs">
-        <button class="nav-tab active" data-section="dashboard" data-lang-mr="डॅशबोर्ड" data-lang-en="Dashboard">डॅशबोर्ड</button>
-        <button class="nav-tab" data-section="transactions" data-lang-mr="व्यवहार" data-lang-en="Transactions">व्यवहार</button>
-        <button class="nav-tab" data-section="sites" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</button>
-        <button class="nav-tab" data-section="reports" data-lang-mr="अहवाल" data-lang-en="Reports">अहवाल</button>
-        <button class="nav-tab" data-section="backup" data-lang-mr="बॅकअप" data-lang-en="Backup">बॅकअप</button>
+<div class="container">
+  <!-- Dashboard -->
+  <div id="dashboard" class="section active">
+    <div class="stats-grid">
+      <div class="stat-card income"><h3>💰 एकूण उत्पन्न</h3><p id="total-income">₹0</p></div>
+      <div class="stat-card expense"><h3>💸 एकूण खर्च</h3><p id="total-expense">₹0</p></div>
+      <div class="stat-card balance"><h3>📊 शिल्लक</h3><p id="total-balance">₹0</p></div>
+      <div class="stat-card"><h3>🏢 एकूण साइट्स</h3><p id="total-sites">0</p></div>
     </div>
-
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="content-section active">
-        <div class="dashboard-grid">
-            <div class="card income">
-                <div class="card-icon">💰</div>
-                <div class="card-title" data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</div>
-                <div class="card-value" id="totalIncome">₹0</div>
-            </div>
-            <div class="card expense">
-                <div class="card-icon">💸</div>
-                <div class="card-title" data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</div>
-                <div class="card-value" id="totalExpense">₹0</div>
-            </div>
-            <div class="card balance">
-                <div class="card-icon">📊</div>
-                <div class="card-title" data-lang-mr="शिल्लक" data-lang-en="Balance">शिल्लक</div>
-                <div class="card-value" id="totalBalance">₹0</div>
-            </div>
-            <div class="card sites">
-                <div class="card-icon">🏢</div>
-                <div class="card-title" data-lang-mr="एकूण साइट्स" data-lang-en="Total Sites">एकूण साइट्स</div>
-                <div class="card-value" id="totalSites">0</div>
-            </div>
-        </div>
-        <div class="section-card">
-            <h3 class="section-title" data-lang-mr="अलीकडील व्यवहार" data-lang-en="Recent Transactions">अलीकडील व्यवहार</h3>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
-                            <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
-                            <th data-lang-mr="वर्णन" data-lang-en="Description">वर्णन</th>
-                            <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
-                            <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recentTransactions"></tbody>
-                </table>
-            </div>
-        </div>
+    <div class="card">
+      <h3>अलीकडील व्यवहार</h3>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>तारीख</th><th>प्रकार</th><th>वर्णन</th><th>रक्कम</th><th>साइट</th></tr></thead>
+          <tbody id="recent-transactions"></tbody>
+        </table>
+      </div>
     </div>
+  </div>
 
-    <!-- TRANSACTIONS -->
-    <div id="transactions" class="content-section">
-        <div class="section-card">
-            <div class="section-header">
-                <h3 class="section-title" data-lang-mr="सर्व व्यवहार" data-lang-en="All Transactions">सर्व व्यवहार</h3>
-                <button class="btn btn-primary" id="addTransactionBtn" data-lang-mr="+ नवीन" data-lang-en="+ Add New">+ नवीन</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
-                            <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
-                            <th data-lang-mr="वर्णन" data-lang-en="Description">वर्णन</th>
-                            <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
-                            <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                            <th data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</th>
-                            <th data-lang-mr="नोंद" data-lang-en="Note">नोंद</th>
-                            <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
-                        </tr>
-                    </thead>
-                    <tbody id="allTransactions"></tbody>
-                </table>
-            </div>
-        </div>
+  <!-- Transactions -->
+  <div id="transactions" class="section">
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openModal('modal-transaction')">+ नवीन व्यवहार</button>
     </div>
-
-    <!-- SITES -->
-    <div id="sites" class="content-section">
-        <div class="section-card">
-            <div class="section-header">
-                <h3 class="section-title" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</h3>
-                <button class="btn btn-primary" id="addSiteBtn" data-lang-mr="+ नवीन साइट" data-lang-en="+ Add Site">+ नवीन साइट</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</th>
-                            <th data-lang-mr="स्थान" data-lang-en="Location">स्थान</th>
-                            <th data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</th>
-                            <th data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</th>
-                            <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sitesList"></tbody>
-                </table>
-            </div>
-        </div>
+    <div class="card" style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>तारीख</th><th>प्रकार</th><th>वर्णन</th><th>रक्कम</th><th>साइट</th><th>व्यक्ती</th><th>पेमेंट मोड</th><th>नोंद</th><th>क्रिया</th></tr></thead>
+        <tbody id="all-transactions"></tbody>
+      </table>
     </div>
+  </div>
 
-    <!-- REPORTS -->
-    <div id="reports" class="content-section">
-        <div class="section-card">
-            <div class="section-header">
-                <h3 class="section-title" data-lang-mr="साइट-निहाय अहवाल" data-lang-en="Site-wise Report">साइट-निहाय अहवाल</h3>
-                <button class="btn btn-success" onclick="window.print()" data-lang-mr="🖨️ प्रिंट करा" data-lang-en="🖨️ Print">🖨️ प्रिंट करा</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                            <th data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</th>
-                            <th data-lang-mr="खर्च" data-lang-en="Expense">खर्च</th>
-                            <th data-lang-mr="नफा/तोटा" data-lang-en="Profit/Loss">नफा/तोटा</th>
-                        </tr>
-                    </thead>
-                    <tbody id="siteReports"></tbody>
-                </table>
-            </div>
-        </div>
+  <!-- Sites -->
+  <div id="sites" class="section">
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openModal('modal-site')">+ नवीन साइट</button>
     </div>
-
-    <!-- BACKUP -->
-    <div id="backup" class="content-section">
-        <div class="backup-section">
-            <div class="backup-card">
-                <div class="backup-card-icon">💾</div>
-                <div class="backup-card-title" data-lang-mr="डेटा बॅकअप" data-lang-en="Backup Data">डेटा बॅकअप</div>
-                <div class="backup-card-desc" data-lang-mr="सर्व डेटा JSON फाइलमध्ये डाउनलोड करा" data-lang-en="Download all data as JSON file">सर्व डेटा JSON फाइलमध्ये डाउनलोड करा</div>
-                <button class="btn btn-success" onclick="backupData()" data-lang-mr="📥 बॅकअप डाउनलोड" data-lang-en="📥 Download Backup">📥 बॅकअप डाउनलोड</button>
-                <div id="backupStatus" class="status-msg"></div>
-            </div>
-
-            <div class="backup-card">
-                <div class="backup-card-icon">📂</div>
-                <div class="backup-card-title" data-lang-mr="डेटा रिस्टोर" data-lang-en="Restore Data">डेटा रिस्टोर</div>
-                <div class="backup-card-desc" data-lang-mr="बॅकअप फाइलमधून डेटा परत आणा" data-lang-en="Restore data from backup file">बॅकअप फाइलमधून डेटा परत आणा</div>
-                <div class="file-input-wrapper">
-                    <input type="file" id="restoreFile" accept=".json" onchange="handleFileSelect(event)">
-                    <label for="restoreFile" class="file-input-label" data-lang-mr="📁 फाइल निवडा (JSON)" data-lang-en="📁 Select File (JSON)">📁 फाइल निवडा (JSON)</label>
-                </div>
-                <div id="fileName" class="file-name"></div>
-                <div id="restoreOptions" class="restore-options">
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="restoreMode" value="merge" checked>
-                            <div>
-                                <strong data-lang-mr="➕ अस्तित्वात असलेल्या डेटामध्ये जोडा" data-lang-en="➕ Add to existing data">➕ अस्तित्वात असलेल्या डेटामध्ये जोडा</strong>
-                                <small data-lang-mr="जुना डेटा ठेवा, नवीन जोडा (डुप्लिकेट्स वगळा)" data-lang-en="Keep old data, add new (skip duplicates)">जुना डेटा ठेवा, नवीन जोडा (डुप्लिकेट्स वगळा)</small>
-                            </div>
-                        </label>
-                        <label>
-                            <input type="radio" name="restoreMode" value="overwrite">
-                            <div>
-                                <strong data-lang-mr="🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)" data-lang-en="🔄 Overwrite (Delete all old data)">🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)</strong>
-                                <small data-lang-mr="सर्व जुना डेटा हटवून नवीन डेटा टाका" data-lang-en="Delete all old data and add new data">सर्व जुना डेटा हटवून नवीन डेटा टाका</small>
-                            </div>
-                        </label>
-                    </div>
-                    <button class="btn btn-warning btn-block" onclick="restoreData()" style="margin-top: 10px;" data-lang-mr="🚀 रिस्टोर करा" data-lang-en="🚀 Restore">🚀 रिस्टोर करा</button>
-                </div>
-                <div id="restoreStatus" class="status-msg"></div>
-            </div>
-        </div>
+    <div class="card" style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>साइट नाव</th><th>स्थान</th><th>एकूण उत्पन्न</th><th>एकूण खर्च</th><th>क्रिया</th></tr></thead>
+        <tbody id="all-sites"></tbody>
+      </table>
     </div>
+  </div>
+
+  <!-- Persons (NEW FEATURE) -->
+  <div id="persons" class="section">
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openModal('modal-person')">+ नवीन व्यक्ती / पक्षी</button>
+    </div>
+    <div class="card" style="overflow-x:auto;">
+      <h3>व्यक्ती हिशोब (लेजर)</h3>
+      <p style="font-size:0.9rem; color:#6b7280; margin-bottom:10px;">कोणत्या व्यक्तीकडे किती रुपये दिले आहेत आणि कोणाकडे किती बाकी आहे.</p>
+      <table>
+        <thead><tr><th>व्यक्तीचे नाव</th><th>दिलेले (Receivable)</th><th>घेतलेले (Payable)</th><th>बाकी (Balance)</th><th>क्रिया</th></tr></thead>
+        <tbody id="all-persons"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Diary (NEW FEATURE) -->
+  <div id="diary" class="section">
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openModal('modal-diary')">+ नवीन डायरी नोंद</button>
+    </div>
+    <div class="card">
+      <h3>📖 वैयक्तिक डायरी / रोजनिशी</h3>
+      <p style="font-size:0.9rem; color:#6b7280; margin-bottom:15px;">तुमच्या दैनंदिन कामाच्या नोंदी, विचार आणि महत्त्वाच्या गोष्टी इथे लिहा.</p>
+      <div id="diary-list"></div>
+    </div>
+  </div>
+
+  <!-- Reports -->
+  <div id="reports" class="section">
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ प्रिंट करा</button>
+    </div>
+    <div class="card">
+      <h3>साइट-निहाय अहवाल</h3>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>साइट</th><th>उत्पन्न</th><th>खर्च</th><th>नफा/तोटा</th></tr></thead>
+          <tbody id="site-reports"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3>व्यक्ती-निहाय अहवाल</h3>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>व्यक्ती</th><th>दिलेले</th><th>घेतलेले</th><th>बाकी</th></tr></thead>
+          <tbody id="person-reports"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backup -->
+  <div id="backup" class="section">
+    <div class="card">
+      <h3>💾 डेटा बॅकअप</h3>
+      <p>सर्व डेटा JSON फाइलमध्ये डाउनलोड करा</p>
+      <button class="btn btn-success" onclick="downloadBackup()" style="margin-top:10px;">📥 बॅकअप डाउनलोड</button>
+    </div>
+    <div class="card">
+      <h3>📂 डेटा रिस्टोर</h3>
+      <p>बॅकअप फाइलमधून डेटा परत आणा</p>
+      <div class="form-group" style="margin-top:15px;">
+        <input type="file" id="restore-file" accept=".json">
+      </div>
+      <div class="radio-group" style="margin-bottom:15px;">
+        <label><input type="radio" name="restore-mode" value="append" checked> ➕ अस्तित्वात असलेल्या डेटामध्ये जोडा (जुना डेटा ठेवा, नवीन जोडा)</label>
+        <label><input type="radio" name="restore-mode" value="overwrite"> 🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)</label>
+      </div>
+      <button class="btn btn-primary" onclick="restoreBackup()">🚀 रिस्टोर करा</button>
+    </div>
+  </div>
 </div>
 
-<!-- TRANSACTION MODAL -->
-<div id="transactionModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title" id="transModalTitle" data-lang-mr="नवीन व्यवहार" data-lang-en="New Transaction">नवीन व्यवहार</h3>
-            <button class="close-btn" onclick="closeModal('transactionModal')">&times;</button>
-        </div>
-        <form id="transactionForm">
-            <input type="hidden" id="transEditId">
-            <div class="form-group">
-                <label data-lang-mr="तारीख" data-lang-en="Date">तारीख</label>
-                <input type="date" id="transDate" required>
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</label>
-                <select id="transType" required>
-                    <option value="income" data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</option>
-                    <option value="expense" data-lang-mr="खर्च" data-lang-en="Expense">खर्च</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="वर्णन (काय खरेदी केले/पैसे का मिळाले)" data-lang-en="Description (What was purchased/received)">वर्णन (काय खरेदी केले/पैसे का मिळाले)</label>
-                <input type="text" id="transDescription" required placeholder="उदा. सिमेंट, सरिया, मजुरी बिल">
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</label>
-                <input type="number" id="transAmount" required placeholder="0" step="0.01">
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="साइट" data-lang-en="Site">साइट</label>
-                <select id="transSite" required></select>
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</label>
-                <select id="transPaymentMode" required>
-                    <option value="cash" data-lang-mr="रोख" data-lang-en="Cash">रोख</option>
-                    <option value="upi" data-lang-mr="UPI" data-lang-en="UPI">UPI</option>
-                    <option value="bank" data-lang-mr="बँक" data-lang-en="Bank">बँक</option>
-                    <option value="cheque" data-lang-mr="धनादेश" data-lang-en="Cheque">धनादेश</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="नोंद" data-lang-en="Note">नोंद</label>
-                <textarea id="transNote" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
-        </form>
+<!-- Modals -->
+<!-- Transaction Modal -->
+<div id="modal-transaction" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>नवीन व्यवहार</h2>
+      <button class="close-btn" onclick="closeModal('modal-transaction')">&times;</button>
     </div>
+    <form id="form-transaction" onsubmit="saveTransaction(event)">
+      <input type="hidden" id="txn-id">
+      <div class="form-group">
+        <label>तारीख</label>
+        <input type="date" id="txn-date" required>
+      </div>
+      <div class="form-group">
+        <label>प्रकार</label>
+        <select id="txn-type" required>
+          <option value="income">उत्पन्न (Income)</option>
+          <option value="expense">खर्च (Expense)</option>
+          <option value="given">दिलेले (Given to Person)</option>
+          <option value="taken">घेतलेले (Taken from Person)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>वर्णन (काय खरेदी केले/पैसे का मिळाले)</label>
+        <input type="text" id="txn-desc" required>
+      </div>
+      <div class="form-group">
+        <label>रक्कम (₹)</label>
+        <input type="number" id="txn-amount" step="0.01" required>
+      </div>
+      <div class="form-group">
+        <label>साइट</label>
+        <select id="txn-site">
+          <option value="">-- साइट निवडा --</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>व्यक्ती / पक्षी</label>
+        <select id="txn-person">
+          <option value="">-- व्यक्ती निवडा --</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>पेमेंट मोड</label>
+        <div class="radio-group">
+          <label><input type="radio" name="txn-mode" value="रोख" checked> रोख</label>
+          <label><input type="radio" name="txn-mode" value="UPI"> UPI</label>
+          <label><input type="radio" name="txn-mode" value="बँक"> बँक</label>
+          <label><input type="radio" name="txn-mode" value="धनादेश"> धनादेश</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>नोंद</label>
+        <textarea id="txn-note"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">जतन करा</button>
+    </form>
+  </div>
 </div>
 
-<!-- SITE MODAL -->
-<div id="siteModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title" data-lang-mr="नवीन साइट" data-lang-en="New Site">नवीन साइट</h3>
-            <button class="close-btn" onclick="closeModal('siteModal')">&times;</button>
-        </div>
-        <form id="siteForm">
-            <div class="form-group">
-                <label data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</label>
-                <input type="text" id="siteName" required>
-            </div>
-            <div class="form-group">
-                <label data-lang-mr="स्थान" data-lang-en="Location">स्थान</label>
-                <input type="text" id="siteLocation" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
-        </form>
+<!-- Site Modal -->
+<div id="modal-site" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>नवीन साइट</h2>
+      <button class="close-btn" onclick="closeModal('modal-site')">&times;</button>
     </div>
+    <form id="form-site" onsubmit="saveSite(event)">
+      <input type="hidden" id="site-id">
+      <div class="form-group">
+        <label>साइट नाव</label>
+        <input type="text" id="site-name" required>
+      </div>
+      <div class="form-group">
+        <label>स्थान</label>
+        <input type="text" id="site-location">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">जतन करा</button>
+    </form>
+  </div>
+</div>
+
+<!-- Person Modal -->
+<div id="modal-person" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>नवीन व्यक्ती / पक्षी</h2>
+      <button class="close-btn" onclick="closeModal('modal-person')">&times;</button>
+    </div>
+    <form id="form-person" onsubmit="savePerson(event)">
+      <input type="hidden" id="person-id">
+      <div class="form-group">
+        <label>व्यक्तीचे नाव</label>
+        <input type="text" id="person-name" required>
+      </div>
+      <div class="form-group">
+        <label>मोबाईल नंबर (ऐच्छिक)</label>
+        <input type="text" id="person-phone">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">जतन करा</button>
+    </form>
+  </div>
+</div>
+
+<!-- Diary Modal -->
+<div id="modal-diary" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>नवीन डायरी नोंद</h2>
+      <button class="close-btn" onclick="closeModal('modal-diary')">&times;</button>
+    </div>
+    <form id="form-diary" onsubmit="saveDiary(event)">
+      <input type="hidden" id="diary-id">
+      <div class="form-group">
+        <label>तारीख</label>
+        <input type="date" id="diary-date" required>
+      </div>
+      <div class="form-group">
+        <label>शीर्षक / विषय</label>
+        <input type="text" id="diary-title" required>
+      </div>
+      <div class="form-group">
+        <label>तपशील / नोंद</label>
+        <textarea id="diary-content" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">जतन करा</button>
+    </form>
+  </div>
 </div>
 
 <script>
-let currentLang = 'mr';
-let selectedBackupFile = null;
-
-const T = {
-    mr: {
-        income: 'उत्पन्न', expense: 'खर्च',
-        noData: 'अजून डेटा नाही',
-        siteAdded: '✅ साइट जोडली',
-        transactionAdded: '✅ व्यवहार जोडला',
-        transactionUpdated: '✅ व्यवहार अपडेट केला',
-        transDeleted: '✅ व्यवहार हटवला',
-        confirmDelete: 'तुम्हाला खात्री आहे का?',
-        backupSuccess: '✅ बॅकअप यशस्वी!',
-        restoreSuccess: '✅ रिस्टोर यशस्वी!',
-        restoreError: '❌ रिस्टोरमध्ये त्रुटी',
-        invalidFile: '❌ चुकीची फाइल फॉरमॅट',
-        confirmOverwrite: '⚠️ सर्व जुना डेटा हटवला जाईल. खात्री आहे?',
-        editTransaction: 'व्यवहार संपादित करा',
-        newTransaction: 'नवीन व्यवहार',
-        edit: 'संपादित', delete: 'हटवा',
-        selectSite: 'साइट निवडा', addSiteFirst: 'प्रथम साइट जोडा'
-    },
-    en: {
-        income: 'Income', expense: 'Expense',
-        noData: 'No data yet',
-        siteAdded: '✅ Site added',
-        transactionAdded: '✅ Transaction added',
-        transactionUpdated: '✅ Transaction updated',
-        transDeleted: '✅ Transaction deleted',
-        confirmDelete: 'Are you sure?',
-        backupSuccess: '✅ Backup successful!',
-        restoreSuccess: '✅ Restore successful!',
-        restoreError: '❌ Restore error',
-        invalidFile: '❌ Invalid file format',
-        confirmOverwrite: '⚠️ All old data will be deleted. Are you sure?',
-        editTransaction: 'Edit Transaction',
-        newTransaction: 'New Transaction',
-        edit: 'Edit', delete: 'Delete',
-        selectSite: 'Select site', addSiteFirst: 'Add site first'
-    }
+// Data Management
+let db = {
+  sites: [],
+  persons: [],
+  transactions: [],
+  diary: []
 };
 
-const Storage = {
-    get: (key) => JSON.parse(localStorage.getItem('ck_' + key) || '[]'),
-    set: (key, data) => localStorage.setItem('ck_' + key, JSON.stringify(data)),
-    add: (key, item) => {
-        const data = Storage.get(key);
-        if (!item.id) item.id = Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-        data.push(item);
-        Storage.set(key, data);
-        return item;
-    },
-    update: (key, id, updates) => {
-        const data = Storage.get(key);
-        const idx = data.findIndex(i => i.id === id);
-        if (idx !== -1) { data[idx] = { ...data[idx], ...updates }; Storage.set(key, data); }
-    },
-    delete: (key, id) => {
-        Storage.set(key, Storage.get(key).filter(i => i.id !== id));
-    },
-    clear: (key) => localStorage.removeItem('ck_' + key)
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-    setupEventListeners();
-    document.getElementById('transDate').valueAsDate = new Date();
-    loadDashboard();
-});
-
-function setupEventListeners() {
-    document.getElementById('langToggle').addEventListener('click', toggleLanguage);
-    document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.addEventListener('click', () => switchSection(tab.dataset.section));
-    });
-    document.getElementById('addTransactionBtn').addEventListener('click', () => {
-        document.getElementById('transEditId').value = '';
-        document.getElementById('transModalTitle').textContent = T[currentLang].newTransaction;
-        document.getElementById('transactionForm').reset();
-        document.getElementById('transDate').valueAsDate = new Date();
-        loadSitesForDropdown();
-        openModal('transactionModal');
-    });
-    document.getElementById('addSiteBtn').addEventListener('click', () => openModal('siteModal'));
-    document.getElementById('transactionForm').addEventListener('submit', handleTransactionSubmit);
-    document.getElementById('siteForm').addEventListener('submit', handleSiteSubmit);
+function loadDB() {
+  const saved = localStorage.getItem('construction_accounting_db');
+  if (saved) {
+    db = JSON.parse(saved);
+    if(!db.persons) db.persons = [];
+    if(!db.diary) db.diary = [];
+  }
 }
 
-function toggleLanguage() {
-    currentLang = currentLang === 'mr' ? 'en' : 'mr';
-    document.getElementById('langToggle').textContent = currentLang === 'mr' ? 'EN' : 'मराठी';
-    document.querySelectorAll('[data-lang-mr]').forEach(el => {
-        const val = el.dataset['lang' + currentLang.charAt(0).toUpperCase() + currentLang.slice(1)];
-        if (val) {
-            if (el.tagName === 'OPTION') el.textContent = val;
-            else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
-            else el.textContent = val;
-        }
-    });
-    loadDashboard();
+function saveDB() {
+  localStorage.setItem('construction_accounting_db', JSON.stringify(db));
 }
 
-function switchSection(sectionId) {
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-    document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
-    document.getElementById(sectionId).classList.add('active');
-
-    if (sectionId === 'dashboard') loadDashboard();
-    else if (sectionId === 'transactions') loadTransactions();
-    else if (sectionId === 'sites') loadSites();
-    else if (sectionId === 'reports') loadReports();
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-function loadDashboard() {
-    const transactions = Storage.get('transactions');
-    let totalIncome = 0, totalExpense = 0;
-    transactions.forEach(t => {
-        const amt = parseFloat(t.amount) || 0;
-        if (t.type === 'income') totalIncome += amt;
-        else totalExpense += amt;
-    });
-    document.getElementById('totalIncome').textContent = '₹' + totalIncome.toLocaleString('en-IN');
-    document.getElementById('totalExpense').textContent = '₹' + totalExpense.toLocaleString('en-IN');
-    document.getElementById('totalBalance').textContent = '₹' + (totalIncome - totalExpense).toLocaleString('en-IN');
-    document.getElementById('totalSites').textContent = Storage.get('sites').length;
-
-    const recent = transactions.slice(-5).reverse();
-    const tbody = document.getElementById('recentTransactions');
-    tbody.innerHTML = recent.length ? recent.map(t => `
-        <tr>
-            <td>${t.date}</td>
-            <td><span class="badge badge-${t.type}">${T[currentLang][t.type]}</span></td>
-            <td>${t.description || '-'}</td>
-            <td>₹${parseFloat(t.amount).toLocaleString('en-IN')}</td>
-            <td>${t.site_name || '-'}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="5" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
+// UI Navigation
+function showTab(tabId) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+  renderAll();
 }
 
-function loadTransactions() {
-    const transactions = Storage.get('transactions').slice().reverse();
-    const tbody = document.getElementById('allTransactions');
-    tbody.innerHTML = transactions.length ? transactions.map(t => `
-        <tr>
-            <td>${t.date}</td>
-            <td><span class="badge badge-${t.type}">${T[currentLang][t.type]}</span></td>
-            <td>${t.description || '-'}</td>
-            <td>₹${parseFloat(t.amount).toLocaleString('en-IN')}</td>
-            <td>${t.site_name || '-'}</td>
-            <td>${t.payment_mode || '-'}</td>
-            <td>${t.note || '-'}</td>
-            <td>
-                <div class="action-btns">
-                    <button class="btn-edit" onclick="editTransaction('${t.id}')">${T[currentLang].edit}</button>
-                    <button class="btn-danger" onclick="deleteTransaction('${t.id}')">${T[currentLang].delete}</button>
-                </div>
-            </td>
-        </tr>
-    `).join('') : `<tr><td colspan="8" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+  if(id === 'modal-transaction') {
+    populateDropdowns();
+    document.getElementById('txn-date').valueAsDate = new Date();
+  }
+  if(id === 'modal-diary') {
+    document.getElementById('diary-date').valueAsDate = new Date();
+  }
 }
 
-function loadSites() {
-    const sites = Storage.get('sites');
-    const transactions = Storage.get('transactions');
-    const tbody = document.getElementById('sitesList');
-    tbody.innerHTML = sites.length ? sites.map(site => {
-        const siteTrans = transactions.filter(t => t.site_id == site.id);
-        const income = siteTrans.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
-        const expense = siteTrans.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
-        return `<tr>
-            <td>${site.name}</td>
-            <td>${site.location}</td>
-            <td>₹${income.toLocaleString('en-IN')}</td>
-            <td>₹${expense.toLocaleString('en-IN')}</td>
-            <td><button class="btn-danger" onclick="deleteSite('${site.id}')">${T[currentLang].delete}</button></td>
-        </tr>`;
-    }).join('') : `<tr><td colspan="5" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  document.getElementById('form-' + id.split('-')[1]).reset();
+  document.getElementById(id.split('-')[1] + '-id').value = '';
 }
 
-function loadReports() {
-    const sites = Storage.get('sites');
-    const transactions = Storage.get('transactions');
-    const tbody = document.getElementById('siteReports');
-    tbody.innerHTML = sites.length ? sites.map(site => {
-        const siteTrans = transactions.filter(t => t.site_id == site.id);
-        const income = siteTrans.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
-        const expense = siteTrans.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
-        const profit = income - expense;
-        return `<tr>
-            <td>${site.name}</td>
-            <td>₹${income.toLocaleString('en-IN')}</td>
-            <td>₹${expense.toLocaleString('en-IN')}</td>
-            <td style="color:${profit >= 0 ? '#48bb78' : '#f56565'};font-weight:600;">₹${profit.toLocaleString('en-IN')}</td>
-        </tr>`;
-    }).join('') : `<tr><td colspan="4" style="text-align:center;color:#718096;">${T[currentLang].noData}</td></tr>`;
+// Populate Dropdowns
+function populateDropdowns() {
+  const siteSelect = document.getElementById('txn-site');
+  const personSelect = document.getElementById('txn-person');
+  
+  siteSelect.innerHTML = '<option value="">-- साइट निवडा --</option>';
+  db.sites.forEach(s => {
+    siteSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+  });
+  
+  personSelect.innerHTML = '<option value="">-- व्यक्ती निवडा --</option>';
+  db.persons.forEach(p => {
+    personSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+  });
 }
 
-function loadSitesForDropdown() {
-    const sites = Storage.get('sites');
-    const select = document.getElementById('transSite');
-    select.innerHTML = sites.length
-        ? sites.map(s => `<option value="${s.id}">${s.name}</option>`).join('')
-        : `<option value="" disabled>${T[currentLang].addSiteFirst}</option>`;
+// Save Functions
+function saveTransaction(e) {
+  e.preventDefault();
+  const id = document.getElementById('txn-id').value || generateId();
+  const mode = document.querySelector('input[name="txn-mode"]:checked').value;
+  
+  const txn = {
+    id: id,
+    date: document.getElementById('txn-date').value,
+    type: document.getElementById('txn-type').value,
+    desc: document.getElementById('txn-desc').value,
+    amount: parseFloat(document.getElementById('txn-amount').value),
+    siteId: document.getElementById('txn-site').value,
+    personId: document.getElementById('txn-person').value,
+    mode: mode,
+    note: document.getElementById('txn-note').value
+  };
+  
+  const existingIndex = db.transactions.findIndex(t => t.id === id);
+  if (existingIndex > -1) {
+    db.transactions[existingIndex] = txn;
+  } else {
+    db.transactions.push(txn);
+  }
+  
+  saveDB();
+  closeModal('modal-transaction');
+  renderAll();
 }
 
-function handleTransactionSubmit(e) {
-    e.preventDefault();
-    const editId = document.getElementById('transEditId').value;
-    const siteId = document.getElementById('transSite').value;
-    const sites = Storage.get('sites');
-    const site = sites.find(s => s.id == siteId);
-    if (!site) { alert(T[currentLang].selectSite); return; }
-
-    const trans = {
-        date: document.getElementById('transDate').value,
-        type: document.getElementById('transType').value,
-        description: document.getElementById('transDescription').value,
-        amount: document.getElementById('transAmount').value,
-        site_id: siteId,
-        site_name: site.name,
-        payment_mode: document.getElementById('transPaymentMode').value,
-        note: document.getElementById('transNote').value,
-        updated_at: new Date().toISOString()
-    };
-
-    if (editId) {
-        Storage.update('transactions', editId, trans);
-        alert(T[currentLang].transactionUpdated);
-    } else {
-        trans.created_at = new Date().toISOString();
-        Storage.add('transactions', trans);
-        alert(T[currentLang].transactionAdded);
-    }
-
-    closeModal('transactionModal');
-    document.getElementById('transactionForm').reset();
-    document.getElementById('transDate').valueAsDate = new Date();
-    loadDashboard();
-    loadTransactions();
+function saveSite(e) {
+  e.preventDefault();
+  const id = document.getElementById('site-id').value || generateId();
+  const site = {
+    id: id,
+    name: document.getElementById('site-name').value,
+    location: document.getElementById('site-location').value
+  };
+  
+  const existingIndex = db.sites.findIndex(s => s.id === id);
+  if (existingIndex > -1) {
+    db.sites[existingIndex] = site;
+  } else {
+    db.sites.push(site);
+  }
+  
+  saveDB();
+  closeModal('modal-site');
+  renderAll();
 }
 
-function editTransaction(id) {
-    const transactions = Storage.get('transactions');
-    const trans = transactions.find(t => t.id === id);
-    if (!trans) return;
-
-    loadSitesForDropdown();
-    document.getElementById('transEditId').value = trans.id;
-    document.getElementById('transModalTitle').textContent = T[currentLang].editTransaction;
-    document.getElementById('transDate').value = trans.date;
-    document.getElementById('transType').value = trans.type;
-    document.getElementById('transDescription').value = trans.description || '';
-    document.getElementById('transAmount').value = trans.amount;
-    document.getElementById('transSite').value = trans.site_id;
-    document.getElementById('transPaymentMode').value = trans.payment_mode;
-    document.getElementById('transNote').value = trans.note || '';
-
-    openModal('transactionModal');
+function savePerson(e) {
+  e.preventDefault();
+  const id = document.getElementById('person-id').value || generateId();
+  const person = {
+    id: id,
+    name: document.getElementById('person-name').value,
+    phone: document.getElementById('person-phone').value
+  };
+  
+  const existingIndex = db.persons.findIndex(p => p.id === id);
+  if (existingIndex > -1) {
+    db.persons[existingIndex] = person;
+  } else {
+    db.persons.push(person);
+  }
+  
+  saveDB();
+  closeModal('modal-person');
+  renderAll();
 }
 
-function handleSiteSubmit(e) {
-    e.preventDefault();
-    Storage.add('sites', {
-        name: document.getElementById('siteName').value,
-        location: document.getElementById('siteLocation').value
-    });
-    closeModal('siteModal');
-    document.getElementById('siteForm').reset();
-    loadSites();
-    alert(T[currentLang].siteAdded);
+function saveDiary(e) {
+  e.preventDefault();
+  const id = document.getElementById('diary-id').value || generateId();
+  const entry = {
+    id: id,
+    date: document.getElementById('diary-date').value,
+    title: document.getElementById('diary-title').value,
+    content: document.getElementById('diary-content').value
+  };
+  
+  const existingIndex = db.diary.findIndex(d => d.id === id);
+  if (existingIndex > -1) {
+    db.diary[existingIndex] = entry;
+  } else {
+    db.diary.push(entry);
+  }
+  
+  saveDB();
+  closeModal('modal-diary');
+  renderAll();
 }
 
+// Delete Functions
 function deleteTransaction(id) {
-    if (!confirm(T[currentLang].confirmDelete)) return;
-    Storage.delete('transactions', id);
-    loadTransactions();
-    loadDashboard();
-    alert(T[currentLang].transDeleted);
+  if(confirm('हा व्यवहार हटवायचा आहे का?')) {
+    db.transactions = db.transactions.filter(t => t.id !== id);
+    saveDB();
+    renderAll();
+  }
 }
 
 function deleteSite(id) {
-    if (!confirm(T[currentLang].confirmDelete)) return;
-    Storage.delete('sites', id);
-    loadSites();
-    loadDashboard();
+  if(confirm('ही साइट हटवायची आहे का?')) {
+    db.sites = db.sites.filter(s => s.id !== id);
+    saveDB();
+    renderAll();
+  }
 }
 
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function deletePerson(id) {
+  if(confirm('ही व्यक्ती हटवायची आहे का?')) {
+    db.persons = db.persons.filter(p => p.id !== id);
+    saveDB();
+    renderAll();
+  }
+}
 
-function backupData() {
-    const statusEl = document.getElementById('backupStatus');
+function deleteDiary(id) {
+  if(confirm('ही डायरी नोंद हटवायची आहे का?')) {
+    db.diary = db.diary.filter(d => d.id !== id);
+    saveDB();
+    renderAll();
+  }
+}
+
+// Render Functions
+function renderAll() {
+  renderDashboard();
+  renderTransactions();
+  renderSites();
+  renderPersons();
+  renderDiary();
+  renderReports();
+}
+
+function renderDashboard() {
+  let totalIncome = 0, totalExpense = 0;
+  db.transactions.forEach(t => {
+    if(t.type === 'income' || t.type === 'taken') totalIncome += t.amount;
+    if(t.type === 'expense' || t.type === 'given') totalExpense += t.amount;
+  });
+  
+  document.getElementById('total-income').innerText = '₹' + totalIncome.toFixed(2);
+  document.getElementById('total-expense').innerText = '₹' + totalExpense.toFixed(2);
+  document.getElementById('total-balance').innerText = '₹' + (totalIncome - totalExpense).toFixed(2);
+  document.getElementById('total-sites').innerText = db.sites.length;
+  
+  const recent = [...db.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+  const tbody = document.getElementById('recent-transactions');
+  tbody.innerHTML = recent.map(t => `
+    <tr>
+      <td>${t.date}</td>
+      <td><span class="badge badge-${t.type}">${getTypeText(t.type)}</span></td>
+      <td>${t.desc}</td>
+      <td>₹${t.amount.toFixed(2)}</td>
+      <td>${getSiteName(t.siteId)}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" style="text-align:center;">कोणतेही व्यवहार नाहीत</td></tr>';
+}
+
+function getTypeText(type) {
+  switch(type) {
+    case 'income': return 'उत्पन्न';
+    case 'expense': return 'खर्च';
+    case 'given': return 'दिलेले';
+    case 'taken': return 'घेतलेले';
+    default: return type;
+  }
+}
+
+function getSiteName(id) {
+  const site = db.sites.find(s => s.id === id);
+  return site ? site.name : '-';
+}
+
+function getPersonName(id) {
+  const person = db.persons.find(p => p.id === id);
+  return person ? person.name : '-';
+}
+
+function renderTransactions() {
+  const sorted = [...db.transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
+  const tbody = document.getElementById('all-transactions');
+  tbody.innerHTML = sorted.map(t => `
+    <tr>
+      <td>${t.date}</td>
+      <td><span class="badge badge-${t.type}">${getTypeText(t.type)}</span></td>
+      <td>${t.desc}</td>
+      <td>₹${t.amount.toFixed(2)}</td>
+      <td>${getSiteName(t.siteId)}</td>
+      <td>${getPersonName(t.personId)}</td>
+      <td>${t.mode}</td>
+      <td>${t.note || '-'}</td>
+      <td>
+        <button class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem;" onclick="deleteTransaction('${t.id}')">हटवा</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="9" style="text-align:center;">कोणतेही व्यवहार नाहीत</td></tr>';
+}
+
+function renderSites() {
+  const tbody = document.getElementById('all-sites');
+  tbody.innerHTML = db.sites.map(s => {
+    let inc = 0, exp = 0;
+    db.transactions.forEach(t => {
+      if(t.siteId === s.id) {
+        if(t.type === 'income' || t.type === 'taken') inc += t.amount;
+        if(t.type === 'expense' || t.type === 'given') exp += t.amount;
+      }
+    });
+    return `
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.location || '-'}</td>
+        <td style="color:var(--success);">₹${inc.toFixed(2)}</td>
+        <td style="color:var(--danger);">₹${exp.toFixed(2)}</td>
+        <td><button class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem;" onclick="deleteSite('${s.id}')">हटवा</button></td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="5" style="text-align:center;">कोणत्याही साइट्स नाहीत</td></tr>';
+}
+
+function renderPersons() {
+  const tbody = document.getElementById('all-persons');
+  tbody.innerHTML = db.persons.map(p => {
+    let given = 0, taken = 0;
+    db.transactions.forEach(t => {
+      if(t.personId === p.id) {
+        if(t.type === 'given') given += t.amount; 
+        if(t.type === 'taken') taken += t.amount; 
+      }
+    });
+    const balance = given - taken;
+    const balanceText = balance > 0 ? `<span style="color:var(--success);">₹${balance.toFixed(2)} ( मिळणार )</span>` : 
+                        balance < 0 ? `<span style="color:var(--danger);">₹${Math.abs(balance).toFixed(2)} ( द्यायचे )</span>` : 
+                        '₹0';
+    return `
+      <tr>
+        <td>${p.name} ${p.phone ? '<br><small style="color:#6b7280;">'+p.phone+'</small>' : ''}</td>
+        <td>₹${given.toFixed(2)}</td>
+        <td>₹${taken.toFixed(2)}</td>
+        <td>${balanceText}</td>
+        <td><button class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem;" onclick="deletePerson('${p.id}')">हटवा</button></td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="5" style="text-align:center;">कोणत्याही व्यक्ती नाहीत</td></tr>';
+}
+
+function renderDiary() {
+  const list = document.getElementById('diary-list');
+  const sorted = [...db.diary].sort((a,b) => new Date(b.date) - new Date(a.date));
+  list.innerHTML = sorted.map(d => `
+    <div class="diary-entry">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h4>${d.title}</h4>
+        <button class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem;" onclick="deleteDiary('${d.id}')">हटवा</button>
+      </div>
+      <div class="date">📅 ${d.date}</div>
+      <p style="margin-top:8px; white-space:pre-wrap;">${d.content}</p>
+    </div>
+  `).join('') || '<p style="text-align:center; color:#6b7280;">कोणत्याही डायरी नोंदी नाहीत. वरील बटन दाबून नवीन नोंद जोडा.</p>';
+}
+
+function renderReports() {
+  const siteTbody = document.getElementById('site-reports');
+  siteTbody.innerHTML = db.sites.map(s => {
+    let inc = 0, exp = 0;
+    db.transactions.forEach(t => {
+      if(t.siteId === s.id) {
+        if(t.type === 'income' || t.type === 'taken') inc += t.amount;
+        if(t.type === 'expense' || t.type === 'given') exp += t.amount;
+      }
+    });
+    const profit = inc - exp;
+    return `
+      <tr>
+        <td>${s.name}</td>
+        <td style="color:var(--success);">₹${inc.toFixed(2)}</td>
+        <td style="color:var(--danger);">₹${exp.toFixed(2)}</td>
+        <td style="color:${profit >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:bold;">₹${profit.toFixed(2)}</td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;">डेटा नाही</td></tr>';
+
+  const personTbody = document.getElementById('person-reports');
+  personTbody.innerHTML = db.persons.map(p => {
+    let given = 0, taken = 0;
+    db.transactions.forEach(t => {
+      if(t.personId === p.id) {
+        if(t.type === 'given') given += t.amount;
+        if(t.type === 'taken') taken += t.amount;
+      }
+    });
+    const balance = given - taken;
+    return `
+      <tr>
+        <td>${p.name}</td>
+        <td>₹${given.toFixed(2)}</td>
+        <td>₹${taken.toFixed(2)}</td>
+        <td style="font-weight:bold; color:${balance >= 0 ? 'var(--success)' : 'var(--danger)'};">₹${balance.toFixed(2)}</td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;">डेटा नाही</td></tr>';
+}
+
+// Backup & Restore
+function downloadBackup() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+  const downloadAnchorNode = document.createElement('a');
+  downloadAnchorNode.setAttribute("href", dataStr);
+  downloadAnchorNode.setAttribute("download", "HISHOB_DIARY_BACKUP_" + new Date().toISOString().slice(0,10) + ".json");
+  document.body.appendChild(downloadAnchorNode);
+  downloadAnchorNode.click();
+  downloadAnchorNode.remove();
+}
+
+function restoreBackup() {
+  const fileInput = document.getElementById('restore-file');
+  if (!fileInput.files.length) {
+    alert('कृपया प्रथम JSON फाइल निवडा!');
+    return;
+  }
+  
+  const file = fileInput.files[0];
+  const mode = document.querySelector('input[name="restore-mode"]:checked').value;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
     try {
-        const sites = Storage.get('sites');
-        const transactions = Storage.get('transactions');
-
-        const backup = {
-            version: '3.0',
-            backupDate: new Date().toISOString(),
-            app: 'Construction Accounting',
-            data: { sites, transactions }
-        };
-
-        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        const dateStr = new Date().toISOString().split('T')[0];
-        a.href = url;
-        a.download = `backup-${dateStr}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        statusEl.className = 'status-msg success';
-        statusEl.textContent = `${T[currentLang].backupSuccess} (${sites.length} sites, ${transactions.length} transactions)`;
+      const imported = JSON.parse(e.target.result);
+      let summary = { sites: 0, persons: 0, transactions: 0, diary: 0 };
+      
+      if (mode === 'overwrite') {
+        db = imported;
+        summary.sites = db.sites ? db.sites.length : 0;
+        summary.persons = db.persons ? db.persons.length : 0;
+        summary.transactions = db.transactions ? db.transactions.length : 0;
+        summary.diary = db.diary ? db.diary.length : 0;
+      } else {
+        if(!db.persons) db.persons = [];
+        if(!db.diary) db.diary = [];
+        if(!imported.persons) imported.persons = [];
+        if(!imported.diary) imported.diary = [];
+        
+        imported.sites.forEach(item => {
+          if(!db.sites.find(x => x.id === item.id)) { db.sites.push(item); summary.sites++; }
+        });
+        imported.persons.forEach(item => {
+          if(!db.persons.find(x => x.id === item.id)) { db.persons.push(item); summary.persons++; }
+        });
+        imported.transactions.forEach(item => {
+          if(!db.transactions.find(x => x.id === item.id)) { db.transactions.push(item); summary.transactions++; }
+        });
+        imported.diary.forEach(item => {
+          if(!db.diary.find(x => x.id === item.id)) { db.diary.push(item); summary.diary++; }
+        });
+      }
+      
+      if(!db.persons) db.persons = [];
+      if(!db.diary) db.diary = [];
+      
+      saveDB();
+      renderAll();
+      
+      // Show Restore Summary
+      alert(`✅ डेटा रिस्टोर यशस्वी!\n\n📊 रिस्टोर सारांश:\n🏢 नवीन साइट्स जोडल्या: ${summary.sites}\n👤 नवीन व्यक्ती जोडल्या: ${summary.persons}\n💸 नवीन व्यवहार जोडले: ${summary.transactions}\n📖 नवीन डायरी नोंदी जोडल्या: ${summary.diary}\n\nएकूण डेटा आता सुरक्षित आहे.`);
+      
     } catch (err) {
-        statusEl.className = 'status-msg error';
-        statusEl.textContent = '❌ ' + err.message;
+      alert('❌ फाइल वाचण्यात अचूकता आली! कृपया योग्य JSON फाइल निवडा.');
+      console.error(err);
     }
+  };
+  reader.readAsText(file);
 }
 
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    const fileNameEl = document.getElementById('fileName');
-    const optionsEl = document.getElementById('restoreOptions');
-    const statusEl = document.getElementById('restoreStatus');
-    statusEl.className = 'status-msg';
-
-    if (!file) {
-        selectedBackupFile = null;
-        fileNameEl.textContent = '';
-        optionsEl.classList.remove('show');
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            const data = JSON.parse(e.target.result);
-            if (!data.data) throw new Error('Invalid');
-            selectedBackupFile = data;
-            const counts = [];
-            if (data.data.sites) counts.push(`${data.data.sites.length} sites`);
-            if (data.data.transactions) counts.push(`${data.data.transactions.length} transactions`);
-            fileNameEl.textContent = `✅ ${file.name} (${counts.join(', ')})`;
-            optionsEl.classList.add('show');
-        } catch (err) {
-            selectedBackupFile = null;
-            fileNameEl.textContent = '';
-            optionsEl.classList.remove('show');
-            statusEl.className = 'status-msg error';
-            statusEl.textContent = T[currentLang].invalidFile;
-        }
-    };
-    reader.readAsText(file);
-}
-
-function restoreData() {
-    if (!selectedBackupFile) return;
-    const statusEl = document.getElementById('restoreStatus');
-    const mode = document.querySelector('input[name="restoreMode"]:checked').value;
-
-    if (mode === 'overwrite') {
-        if (!confirm(T[currentLang].confirmOverwrite)) return;
-    }
-
-    try {
-        statusEl.className = 'status-msg info';
-        statusEl.textContent = currentLang === 'mr' ? '⏳ रिस्टोर करत आहे...' : '⏳ Restoring...';
-
-        const backup = selectedBackupFile.data;
-        let sitesAdded = 0, transAdded = 0;
-
-        if (mode === 'overwrite') {
-            Storage.clear('transactions');
-            Storage.clear('sites');
-
-            (backup.sites || []).forEach(s => { const { id, ...rest } = s; Storage.add('sites', rest); sitesAdded++; });
-            (backup.transactions || []).forEach(t => { const { id, ...rest } = t; Storage.add('transactions', rest); transAdded++; });
-        } else {
-            const existingSites = Storage.get('sites');
-            const existingTrans = Storage.get('transactions');
-
-            (backup.sites || []).forEach(site => {
-                const exists = existingSites.some(s => s.name === site.name && s.location === site.location);
-                if (!exists) { const { id, ...rest } = site; Storage.add('sites', rest); sitesAdded++; }
-            });
-
-            (backup.transactions || []).forEach(trans => {
-                const exists = existingTrans.some(t =>
-                    t.date === trans.date &&
-                    t.amount == trans.amount &&
-                    t.type === trans.type &&
-                    t.site_name === trans.site_name &&
-                    t.description === trans.description &&
-                    Math.abs(new Date(t.created_at || 0) - new Date(trans.created_at || 0)) < 1000
-                );
-                if (!exists) { const { id, ...rest } = trans; Storage.add('transactions', rest); transAdded++; }
-            });
-        }
-
-        statusEl.className = 'status-msg success';
-        statusEl.textContent = `${T[currentLang].restoreSuccess} (+${sitesAdded} sites, +${transAdded} transactions)`;
-
-        document.getElementById('restoreFile').value = '';
-        document.getElementById('fileName').textContent = '';
-        document.getElementById('restoreOptions').classList.remove('show');
-        selectedBackupFile = null;
-
-        loadDashboard();
-    } catch (err) {
-        statusEl.className = 'status-msg error';
-        statusEl.textContent = T[currentLang].restoreError + ': ' + err.message;
-    }
-}
+// Initialize
+loadDB();
+renderAll();
 </script>
 </body>
 </html>
