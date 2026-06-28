@@ -9,11 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -22,23 +18,14 @@
             color: #2d3748;
         }
 
-        .screen {
-            display: none;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         @keyframes pulse {
@@ -46,50 +33,202 @@
             50% { transform: scale(1.05); }
         }
 
-        /* Login Screen */
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 40px 30px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
             animation: fadeIn 0.6s ease-out;
         }
 
-        .logo {
-            text-align: center;
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left h2 { font-size: 24px; color: #2d3748; }
+        .header-left p { color: #718096; font-size: 14px; }
+
+        .header-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+        .lang-toggle, .backup-btn {
+            background: #edf2f7;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .lang-toggle:hover, .backup-btn:hover { background: #e2e8f0; transform: translateY(-2px); }
+
+        .backup-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .nav-tabs {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            border: none;
+            background: #f7fafc;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-tab:hover { background: #edf2f7; }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
         }
 
-        .logo-icon {
-            font-size: 60px;
-            margin-bottom: 10px;
-            animation: pulse 2s infinite;
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s;
         }
 
-        .logo h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 5px;
-        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-        .logo p {
-            color: #718096;
-            font-size: 14px;
-        }
+        .card-icon { font-size: 40px; margin-bottom: 15px; }
+        .card-title { font-size: 14px; color: #718096; margin-bottom: 8px; }
+        .card-value { font-size: 28px; font-weight: 700; color: #2d3748; }
 
-        .form-group {
+        .card.income { border-left: 4px solid #48bb78; }
+        .card.expense { border-left: 4px solid #f56565; }
+        .card.balance { border-left: 4px solid #4299e1; }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.4s; }
+
+        .section-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #4a5568;
+        .section-title { font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #2d3748; }
+
+        .table-container { overflow-x: auto; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f7fafc; font-weight: 600; color: #4a5568; }
+        tr:hover { background: #f7fafc; }
+
+        .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .badge-income { background: #c6f6d5; color: #22543d; }
+        .badge-expense { background: #fed7d7; color: #742a2a; }
+        .badge-staff { background: #bee3f8; color: #2c5282; }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3); }
+
+        .btn-danger { background: #fc8181; color: white; }
+        .btn-danger:hover { background: #f56565; }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title { font-size: 20px; font-weight: 600; }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #4a5568; }
 
         .form-group input,
         .form-group select,
@@ -111,396 +250,96 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: #edf2f7;
-            color: #4a5568;
-        }
-
-        .btn-secondary:hover {
-            background: #e2e8f0;
-        }
-
-        .btn-danger {
-            background: #fc8181;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #f56565;
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .error-msg {
-            background: #fed7d7;
-            color: #c53030;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .error-msg.show {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        .success-msg {
-            background: #c6f6d5;
-            color: #22543d;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .success-msg.show {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        /* Main App */
-        .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .header-left h2 {
-            font-size: 24px;
-            color: #2d3748;
-        }
-
-        .header-left p {
-            color: #718096;
-            font-size: 14px;
-        }
-
-        .header-right {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .lang-toggle {
-            background: #edf2f7;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .lang-toggle:hover {
-            background: #e2e8f0;
-        }
-
-        .logout-btn {
-            background: #fc8181;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: #f56565;
-        }
-
-        /* Navigation */
-        .nav-tabs {
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-        }
-
-        .nav-tab {
-            padding: 10px 20px;
-            border: none;
-            background: #f7fafc;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 500;
-            white-space: nowrap;
-            transition: all 0.3s;
-        }
-
-        .nav-tab:hover {
-            background: #edf2f7;
-        }
-
-        .nav-tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        /* Dashboard Cards */
-        .dashboard-grid {
+        /* Backup/Restore Section */
+        .backup-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
         }
 
-        .card {
+        .backup-card {
             background: white;
-            padding: 25px;
+            padding: 30px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
             transition: all 0.3s;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+        .backup-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-        .card-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
-        }
+        .backup-card-icon { font-size: 60px; margin-bottom: 15px; }
+        .backup-card-title { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #2d3748; }
+        .backup-card-desc { color: #718096; font-size: 14px; margin-bottom: 20px; min-height: 40px; }
 
-        .card-title {
-            font-size: 14px;
-            color: #718096;
-            margin-bottom: 8px;
-        }
-
-        .card-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2d3748;
-        }
-
-        .card.income {
-            border-left: 4px solid #48bb78;
-        }
-
-        .card.expense {
-            border-left: 4px solid #f56565;
-        }
-
-        .card.balance {
-            border-left: 4px solid #4299e1;
-        }
-
-        /* Content Sections */
-        .content-section {
+        .restore-options {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
             display: none;
         }
 
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.4s;
-        }
+        .restore-options.show { display: block; animation: fadeIn 0.3s; }
 
-        .section-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+        .radio-group { margin: 10px 0; }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
+        .radio-group label:hover { background: #edf2f7; }
+        .radio-group input[type="radio"] { width: auto; margin: 0; }
 
-        .section-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #2d3748;
-        }
-
-        /* Table */
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
             width: 100%;
-            border-collapse: collapse;
         }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
         }
 
-        th {
-            background: #f7fafc;
-            font-weight: 600;
+        .file-input-label {
+            display: block;
+            padding: 12px 24px;
+            background: #edf2f7;
             color: #4a5568;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            border: 2px dashed #cbd5e0;
         }
 
-        tr:hover {
-            background: #f7fafc;
-        }
+        .file-input-label:hover { background: #e2e8f0; border-color: #667eea; }
 
-        .badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+        .file-name {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #48bb78;
             font-weight: 500;
         }
 
-        .badge-income {
-            background: #c6f6d5;
-            color: #22543d;
-        }
-
-        .badge-expense {
-            background: #fed7d7;
-            color: #742a2a;
-        }
-
-        .badge-admin {
-            background: #c6f6d5;
-            color: #22543d;
-        }
-
-        .badge-staff {
-            background: #bee3f8;
-            color: #2c5282;
-        }
-
-        /* Modal */
-        .modal {
+        .status-msg {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            animation: fadeIn 0.3s;
         }
 
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideIn 0.3s;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #718096;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-tabs {
-                flex-wrap: nowrap;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .login-container {
-                margin: 20px;
-                padding: 30px 20px;
-            }
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #718096;
-        }
-
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .status-msg.success { background: #c6f6d5; color: #22543d; display: block; }
+        .status-msg.error { background: #fed7d7; color: #742a2a; display: block; }
+        .status-msg.info { background: #bee3f8; color: #2c5282; display: block; }
 
         .demo-notice {
             background: #fef5e7;
@@ -511,192 +350,218 @@
             font-size: 14px;
             color: #7d6608;
         }
+
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: flex-start; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="loginScreen" class="screen active">
-        <div class="login-container">
-            <div class="logo">
-                <div class="logo-icon">🏗️</div>
-                <h1 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h1>
-                <p data-lang-mr="तुमचा बांधकाम व्यवसाय सोपा करा" data-lang-en="Simplify your construction business">तुमचा बांधकाम व्यवसाय सोपा करा</p>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h2 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h2>
+                <p id="welcomeMsg" data-lang-mr="तुमचा बांधकाम व्यवसाय सोपा करा" data-lang-en="Simplify your construction business">तुमचा बांधकाम व्यवसाय सोपा करा</p>
             </div>
-            <div id="loginError" class="error-msg"></div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</label>
-                    <input type="text" id="loginUsername" required placeholder="lucky / jitesh">
-                </div>
-                <div class="form-group">
-                    <label data-lang-mr="पासवर्ड" data-lang-en="Password">पासवर्ड</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••">
-                </div>
-                <button type="submit" class="btn btn-primary" data-lang-mr="लॉगिन" data-lang-en="Login">लॉगिन</button>
-            </form>
+            <div class="header-right">
+                <button class="lang-toggle" id="langToggle">EN</button>
+                <button class="backup-btn" onclick="switchSection('backup')" data-lang-mr="💾 बॅकअप" data-lang-en="💾 Backup">💾 बॅकअप</button>
+            </div>
         </div>
-    </div>
 
-    <!-- Main App -->
-    <div id="mainApp" class="screen">
-        <div class="app-container">
-            <!-- Header -->
-            <div class="header">
-                <div class="header-left">
-                    <h2 data-lang-mr="बांधकाम हिशोब" data-lang-en="Construction Accounting">बांधकाम हिशोब</h2>
-                    <p id="welcomeMsg"></p>
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-section="dashboard" data-lang-mr="डॅशबोर्ड" data-lang-en="Dashboard">डॅशबोर्ड</button>
+            <button class="nav-tab" data-section="transactions" data-lang-mr="व्यवहार" data-lang-en="Transactions">व्यवहार</button>
+            <button class="nav-tab" data-section="sites" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</button>
+            <button class="nav-tab" data-section="staff" data-lang-mr="कर्मचारी" data-lang-en="Staff">कर्मचारी</button>
+            <button class="nav-tab" data-section="reports" data-lang-mr="अहवाल" data-lang-en="Reports">अहवाल</button>
+            <button class="nav-tab" data-section="backup" data-lang-mr="बॅकअप/रिस्टोर" data-lang-en="Backup/Restore">बॅकअप/रिस्टोर</button>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="content-section active">
+            <div id="demoNotice" class="demo-notice" style="display:none;">
+                ⚠️ <strong>Demo Mode:</strong> Supabase setup नाही. Data localStorage मध्ये save होतो.
+            </div>
+            <div class="dashboard-grid">
+                <div class="card income">
+                    <div class="card-icon">💰</div>
+                    <div class="card-title" data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</div>
+                    <div class="card-value" id="totalIncome">₹0</div>
                 </div>
-                <div class="header-right">
-                    <button class="lang-toggle" id="langToggle">EN</button>
-                    <button class="logout-btn" id="logoutBtn" data-lang-mr="लॉगआउट" data-lang-en="Logout">लॉगआउट</button>
+                <div class="card expense">
+                    <div class="card-icon">💸</div>
+                    <div class="card-title" data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</div>
+                    <div class="card-value" id="totalExpense">₹0</div>
+                </div>
+                <div class="card balance">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title" data-lang-mr="शिल्लक" data-lang-en="Balance">शिल्लक</div>
+                    <div class="card-value" id="totalBalance">₹0</div>
                 </div>
             </div>
-
-            <!-- Navigation -->
-            <div class="nav-tabs">
-                <button class="nav-tab active" data-section="dashboard" data-lang-mr="डॅशबोर्ड" data-lang-en="Dashboard">डॅशबोर्ड</button>
-                <button class="nav-tab" data-section="transactions" data-lang-mr="व्यवहार" data-lang-en="Transactions">व्यवहार</button>
-                <button class="nav-tab" data-section="sites" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</button>
-                <button class="nav-tab admin-only" data-section="staff" data-lang-mr="कर्मचारी" data-lang-en="Staff">कर्मचारी</button>
-                <button class="nav-tab" data-section="reports" data-lang-mr="अहवाल" data-lang-en="Reports">अहवाल</button>
-            </div>
-
-            <!-- Dashboard Section -->
-            <div id="dashboard" class="content-section active">
-                <div id="demoNotice" class="demo-notice" style="display:none;">
-                    ⚠️ <strong>Demo Mode:</strong> Supabase setup नाही. Data localStorage मध्ये save होतो. Setup केल्यावर सर्व devices वर sync होईल.
-                </div>
-                
-                <div class="dashboard-grid">
-                    <div class="card income">
-                        <div class="card-icon">💰</div>
-                        <div class="card-title" data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</div>
-                        <div class="card-value" id="totalIncome">₹0</div>
-                    </div>
-                    <div class="card expense">
-                        <div class="card-icon">💸</div>
-                        <div class="card-title" data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</div>
-                        <div class="card-value" id="totalExpense">₹0</div>
-                    </div>
-                    <div class="card balance">
-                        <div class="card-icon">📊</div>
-                        <div class="card-title" data-lang-mr="शिल्लक" data-lang-en="Balance">शिल्लक</div>
-                        <div class="card-value" id="totalBalance">₹0</div>
-                    </div>
-                </div>
-
-                <div class="section-card">
-                    <h3 class="section-title" data-lang-mr="अलीकडील व्यवहार" data-lang-en="Recent Transactions">अलीकडील व्यवहार</h3>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
-                                    <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
-                                    <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
-                                    <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentTransactions"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Transactions Section -->
-            <div id="transactions" class="content-section">
-                <div class="section-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 class="section-title" style="margin: 0;" data-lang-mr="सर्व व्यवहार" data-lang-en="All Transactions">सर्व व्यवहार</h3>
-                        <button class="btn btn-primary" id="addTransactionBtn" data-lang-mr="+ नवीन" data-lang-en="+ Add New">+ नवीन</button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
-                                    <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
-                                    <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
-                                    <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                                    <th data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</th>
-                                    <th data-lang-mr="नोंद" data-lang-en="Note">नोंद</th>
-                                </tr>
-                            </thead>
-                            <tbody id="allTransactions"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sites Section -->
-            <div id="sites" class="content-section">
-                <div class="section-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 class="section-title" style="margin: 0;" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</h3>
-                        <button class="btn btn-primary admin-only" id="addSiteBtn" data-lang-mr="+ नवीन साइट" data-lang-en="+ Add Site">+ नवीन साइट</button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</th>
-                                    <th data-lang-mr="स्थान" data-lang-en="Location">स्थान</th>
-                                    <th data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</th>
-                                    <th data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sitesList"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Staff Section (Admin Only) -->
-            <div id="staff" class="content-section">
-                <div class="section-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 class="section-title" style="margin: 0;" data-lang-mr="कर्मचारी व्यवस्थापन" data-lang-en="Staff Management">कर्मचारी व्यवस्थापन</h3>
-                        <button class="btn btn-primary" id="addStaffBtn" data-lang-mr="+ नवीन कर्मचारी" data-lang-en="+ Add Staff">+ नवीन कर्मचारी</button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-lang-mr="नाव" data-lang-en="Name">नाव</th>
-                                    <th data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</th>
-                                    <th data-lang-mr="भूमिका" data-lang-en="Role">भूमिका</th>
-                                    <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
-                                </tr>
-                            </thead>
-                            <tbody id="staffList"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reports Section -->
-            <div id="reports" class="content-section">
-                <div class="section-card">
-                    <h3 class="section-title" data-lang-mr="साइट-निहाय अहवाल" data-lang-en="Site-wise Report">साइट-निहाय अहवाल</h3>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
-                                    <th data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</th>
-                                    <th data-lang-mr="खर्च" data-lang-en="Expense">खर्च</th>
-                                    <th data-lang-mr="नफा/तोटा" data-lang-en="Profit/Loss">नफा/तोटा</th>
-                                </tr>
-                            </thead>
-                            <tbody id="siteReports"></tbody>
-                        </table>
-                    </div>
+            <div class="section-card">
+                <h3 class="section-title" data-lang-mr="अलीकडील व्यवहार" data-lang-en="Recent Transactions">अलीकडील व्यवहार</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
+                                <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
+                                <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
+                                <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentTransactions"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+        <!-- Transactions -->
+        <div id="transactions" class="content-section">
+            <div class="section-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h3 class="section-title" style="margin: 0;" data-lang-mr="सर्व व्यवहार" data-lang-en="All Transactions">सर्व व्यवहार</h3>
+                    <button class="btn btn-primary" id="addTransactionBtn" data-lang-mr="+ नवीन" data-lang-en="+ Add New">+ नवीन</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-lang-mr="तारीख" data-lang-en="Date">तारीख</th>
+                                <th data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</th>
+                                <th data-lang-mr="रक्कम" data-lang-en="Amount">रक्कम</th>
+                                <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                                <th data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</th>
+                                <th data-lang-mr="नोंद" data-lang-en="Note">नोंद</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allTransactions"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sites -->
+        <div id="sites" class="content-section">
+            <div class="section-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h3 class="section-title" style="margin: 0;" data-lang-mr="साइट्स" data-lang-en="Sites">साइट्स</h3>
+                    <button class="btn btn-primary" id="addSiteBtn" data-lang-mr="+ नवीन साइट" data-lang-en="+ Add Site">+ नवीन साइट</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-lang-mr="साइट नाव" data-lang-en="Site Name">साइट नाव</th>
+                                <th data-lang-mr="स्थान" data-lang-en="Location">स्थान</th>
+                                <th data-lang-mr="एकूण उत्पन्न" data-lang-en="Total Income">एकूण उत्पन्न</th>
+                                <th data-lang-mr="एकूण खर्च" data-lang-en="Total Expense">एकूण खर्च</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sitesList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Staff -->
+        <div id="staff" class="content-section">
+            <div class="section-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h3 class="section-title" style="margin: 0;" data-lang-mr="कर्मचारी व्यवस्थापन" data-lang-en="Staff Management">कर्मचारी व्यवस्थापन</h3>
+                    <button class="btn btn-primary" id="addStaffBtn" data-lang-mr="+ नवीन कर्मचारी" data-lang-en="+ Add Staff">+ नवीन कर्मचारी</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-lang-mr="नाव" data-lang-en="Name">नाव</th>
+                                <th data-lang-mr="युजरनेम" data-lang-en="Username">युजरनेम</th>
+                                <th data-lang-mr="भूमिका" data-lang-en="Role">भूमिका</th>
+                                <th data-lang-mr="क्रिया" data-lang-en="Actions">क्रिया</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports -->
+        <div id="reports" class="content-section">
+            <div class="section-card">
+                <h3 class="section-title" data-lang-mr="साइट-निहाय अहवाल" data-lang-en="Site-wise Report">साइट-निहाय अहवाल</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-lang-mr="साइट" data-lang-en="Site">साइट</th>
+                                <th data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</th>
+                                <th data-lang-mr="खर्च" data-lang-en="Expense">खर्च</th>
+                                <th data-lang-mr="नफा/तोटा" data-lang-en="Profit/Loss">नफा/तोटा</th>
+                            </tr>
+                        </thead>
+                        <tbody id="siteReports"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backup/Restore Section -->
+        <div id="backup" class="content-section">
+            <div class="backup-section">
+                <!-- Backup Card -->
+                <div class="backup-card">
+                    <div class="backup-card-icon">💾</div>
+                    <div class="backup-card-title" data-lang-mr="डेटा बॅकअप" data-lang-en="Backup Data">डेटा बॅकअप</div>
+                    <div class="backup-card-desc" data-lang-mr="सर्व साइट्स, व्यवहार आणि कर्मचारी डेटा JSON फाइलमध्ये डाउनलोड करा" data-lang-en="Download all sites, transactions and staff data as JSON file">सर्व साइट्स, व्यवहार आणि कर्मचारी डेटा JSON फाइलमध्ये डाउनलोड करा</div>
+                    <button class="btn btn-success" onclick="backupData()" data-lang-mr="📥 बॅकअप डाउनलोड करा" data-lang-en="📥 Download Backup">📥 बॅकअप डाउनलोड करा</button>
+                    <div id="backupStatus" class="status-msg"></div>
+                </div>
+
+                <!-- Restore Card -->
+                <div class="backup-card">
+                    <div class="backup-card-icon">📂</div>
+                    <div class="backup-card-title" data-lang-mr="डेटा रिस्टोर" data-lang-en="Restore Data">डेटा रिस्टोर</div>
+                    <div class="backup-card-desc" data-lang-mr="बॅकअप फाइलमधून डेटा परत आणा" data-lang-en="Restore data from backup file">बॅकअप फाइलमधून डेटा परत आणा</div>
+                    
+                    <div class="file-input-wrapper">
+                        <input type="file" id="restoreFile" accept=".json" onchange="handleFileSelect(event)">
+                        <label for="restoreFile" class="file-input-label" data-lang-mr="📁 फाइल निवडा (JSON)" data-lang-en="📁 Select File (JSON)">📁 फाइल निवडा (JSON)</label>
+                    </div>
+                    <div id="fileName" class="file-name"></div>
+
+                    <div id="restoreOptions" class="restore-options">
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="restoreMode" value="overwrite" checked>
+                                <div>
+                                    <strong data-lang-mr="🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)" data-lang-en="🔄 Overwrite (Delete all old data)">🔄 ओव्हरराइट (सर्व जुना डेटा हटवा)</strong>
+                                    <div style="font-size: 12px; color: #718096; margin-top: 4px;" data-lang-mr="सर्व जुना डेटा हटवून नवीन डेटा टाका" data-lang-en="Delete all old data and add new data">सर्व जुना डेटा हटवून नवीन डेटा टाका</div>
+                                </div>
+                            </label>
+                            <label>
+                                <input type="radio" name="restoreMode" value="merge">
+                                <div>
+                                    <strong data-lang-mr="➕ अस्तित्वात असलेल्या डेटामध्ये जोडा" data-lang-en="➕ Add to existing data">➕ अस्तित्वात असलेल्या डेटामध्ये जोडा</strong>
+                                    <div style="font-size: 12px; color: #718096; margin-top: 4px;" data-lang-mr="जुना डेटा ठेवा, नवीन डेटा जोडा (डुप्लिकेट्स वगळा)" data-lang-en="Keep old data, add new (skip duplicates)">जुना डेटा ठेवा, नवीन डेटा जोडा (डुप्लिकेट्स वगळा)</div>
+                                </div>
+                            </label>
+                        </div>
+                        <button class="btn btn-warning" onclick="restoreData()" style="width: 100%; margin-top: 10px;" data-lang-mr="🚀 रिस्टोर करा" data-lang-en="🚀 Restore">🚀 रिस्टोर करा</button>
+                    </div>
+                    <div id="restoreStatus" class="status-msg"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Add Transaction Modal -->
+    <!-- Transaction Modal -->
     <div id="transactionModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -711,8 +576,8 @@
                 <div class="form-group">
                     <label data-lang-mr="प्रकार" data-lang-en="Type">प्रकार</label>
                     <select id="transType" required>
-                        <option value="income" data-lang-mr="उत्पन्न" data-lang-en="Income">उत्पन्न</option>
-                        <option value="expense" data-lang-mr="खर्च" data-lang-en="Expense">खर्च</option>
+                        <option value="income">उत्पन्न / Income</option>
+                        <option value="expense">खर्च / Expense</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -726,22 +591,22 @@
                 <div class="form-group">
                     <label data-lang-mr="पेमेंट मोड" data-lang-en="Payment Mode">पेमेंट मोड</label>
                     <select id="transPaymentMode" required>
-                        <option value="cash" data-lang-mr="रोख" data-lang-en="Cash">रोख</option>
-                        <option value="upi" data-lang-mr="UPI" data-lang-en="UPI">UPI</option>
-                        <option value="bank" data-lang-mr="बँक" data-lang-en="Bank">बँक</option>
-                        <option value="cheque" data-lang-mr="धनादेश" data-lang-en="Cheque">धनादेश</option>
+                        <option value="cash">रोख / Cash</option>
+                        <option value="upi">UPI</option>
+                        <option value="bank">बँक / Bank</option>
+                        <option value="cheque">धनादेश / Cheque</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label data-lang-mr="नोंद" data-lang-en="Note">नोंद</label>
-                    <textarea id="transNote" rows="3" placeholder="Optional"></textarea>
+                    <textarea id="transNote" rows="3"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
             </form>
         </div>
     </div>
 
-    <!-- Add Site Modal -->
+    <!-- Site Modal -->
     <div id="siteModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -757,12 +622,12 @@
                     <label data-lang-mr="स्थान" data-lang-en="Location">स्थान</label>
                     <input type="text" id="siteLocation" required>
                 </div>
-                <button type="submit" class="btn btn-primary" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
             </form>
         </div>
     </div>
 
-    <!-- Add Staff Modal -->
+    <!-- Staff Modal -->
     <div id="staffModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -782,259 +647,132 @@
                     <label data-lang-mr="पासवर्ड" data-lang-en="Password">पासवर्ड</label>
                     <input type="password" id="staffPassword" required>
                 </div>
-                <button type="submit" class="btn btn-primary" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;" data-lang-mr="जतन करा" data-lang-en="Save">जतन करा</button>
             </form>
         </div>
     </div>
 
     <script>
-        // Supabase Configuration - REPLACE WITH YOUR CREDENTIALS LATER
+        // Supabase Configuration
         const SUPABASE_URL = 'https://thizsrfyzxtnujuxswwb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoaXpzcmZ5enh0bnVqdXhzd3diIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzEyMTAsImV4cCI6MjA5ODEwNzIxMH0.5Kf3FTQvIHM2zzcW3375FELTTnPtIpXVupCrZp6Jbsw';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
         
         let supabase = null;
         let useSupabase = false;
         
         try {
-            if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
+            if (SUPABASE_URL && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 useSupabase = true;
                 console.log('✅ Supabase connected');
-            } else {
-                console.log('⚠️ Demo mode - using localStorage');
             }
         } catch (error) {
             console.error('Supabase init error:', error);
-            useSupabase = false;
         }
 
-        // Hardcoded Admin Users
-        const ADMIN_USERS = [
-            { username: 'lucky', password: '1196', role: 'admin', name: 'Lucky' },
-            { username: 'jitesh', password: '2000', role: 'admin', name: 'Jitesh' }
-        ];
-
-        let currentUser = null;
         let currentLang = 'mr';
+        let selectedBackupFile = null;
 
-        // Language translations
         const translations = {
             mr: {
-                welcome: 'स्वागत',
+                welcome: 'तुमचा बांधकाम व्यवसाय सोपा करा',
                 totalIncome: 'एकूण उत्पन्न',
                 totalExpense: 'एकूण खर्च',
                 balance: 'शिल्लक',
-                date: 'तारीख',
-                type: 'प्रकार',
-                amount: 'रक्कम',
-                site: 'साइट',
-                paymentMode: 'पेमेंट मोड',
-                note: 'नोंद',
                 income: 'उत्पन्न',
                 expense: 'खर्च',
-                admin: 'प्रशासक',
                 staff: 'कर्मचारी',
                 delete: 'हटवा',
-                loginError: 'चुकीचा युजरनेम किंवा पासवर्ड',
-                transactionAdded: 'व्यवहार जोडला',
+                backupSuccess: '✅ बॅकअप यशस्वी! फाइल डाउनलोड झाली',
+                backupError: '❌ बॅकअपमध्ये त्रुटी',
+                restoreSuccess: '✅ रिस्टोर यशस्वी!',
+                restoreError: '❌ रिस्टोरमध्ये त्रुटी',
+                invalidFile: '❌ चुकीची फाइल फॉरमॅट',
+                confirmOverwrite: '⚠️ सर्व जुना डेटा हटवला जाईल. तुम्हाला खात्री आहे का?',
+                noData: 'अजून डेटा नाही',
                 siteAdded: 'साइट जोडली',
+                transactionAdded: 'व्यवहार जोडला',
                 staffAdded: 'कर्मचारी जोडला',
                 staffDeleted: 'कर्मचारी हटवला'
             },
             en: {
-                welcome: 'Welcome',
+                welcome: 'Simplify your construction business',
                 totalIncome: 'Total Income',
                 totalExpense: 'Total Expense',
                 balance: 'Balance',
-                date: 'Date',
-                type: 'Type',
-                amount: 'Amount',
-                site: 'Site',
-                paymentMode: 'Payment Mode',
-                note: 'Note',
                 income: 'Income',
                 expense: 'Expense',
-                admin: 'Admin',
                 staff: 'Staff',
                 delete: 'Delete',
-                loginError: 'Invalid username or password',
-                transactionAdded: 'Transaction added',
+                backupSuccess: '✅ Backup successful! File downloaded',
+                backupError: '❌ Backup error',
+                restoreSuccess: '✅ Restore successful!',
+                restoreError: '❌ Restore error',
+                invalidFile: '❌ Invalid file format',
+                confirmOverwrite: '⚠️ All old data will be deleted. Are you sure?',
+                noData: 'No data yet',
                 siteAdded: 'Site added',
+                transactionAdded: 'Transaction added',
                 staffAdded: 'Staff added',
                 staffDeleted: 'Staff deleted'
             }
         };
 
-        // LocalStorage helpers for demo mode
+        // LocalStorage helpers
         const Storage = {
-            get: (key) => {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : [];
-            },
-            set: (key, data) => {
-                localStorage.setItem(key, JSON.stringify(data));
-            },
+            get: (key) => JSON.parse(localStorage.getItem(key) || '[]'),
+            set: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
             add: (key, item) => {
                 const data = Storage.get(key);
-                item.id = Date.now();
+                item.id = item.id || Date.now();
                 data.push(item);
                 Storage.set(key, data);
                 return item;
             },
             delete: (key, id) => {
-                const data = Storage.get(key).filter(item => item.id !== id);
-                Storage.set(key, data);
-            }
+                Storage.set(key, Storage.get(key).filter(i => i.id !== id));
+            },
+            clear: (key) => localStorage.removeItem(key)
         };
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('App initialized');
-            checkAuth();
             setupEventListeners();
-            
-            // Show demo notice if not using Supabase
             if (!useSupabase) {
-                setTimeout(() => {
-                    const notice = document.getElementById('demoNotice');
-                    if (notice) notice.style.display = 'block';
-                }, 100);
+                document.getElementById('demoNotice').style.display = 'block';
             }
+            loadDashboard();
         });
 
-        function checkAuth() {
-            const user = localStorage.getItem('currentUser');
-            if (user) {
-                currentUser = JSON.parse(user);
-                showMainApp();
-            }
-        }
-
         function setupEventListeners() {
-            // Login
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            
-            // Logout
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-            
-            // Language toggle
             document.getElementById('langToggle').addEventListener('click', toggleLanguage);
-            
-            // Navigation
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.addEventListener('click', () => switchSection(tab.dataset.section));
             });
-            
-            // Add buttons
-            document.getElementById('addTransactionBtn').addEventListener('click', () => openModal('transactionModal'));
+            document.getElementById('addTransactionBtn').addEventListener('click', () => {
+                loadSitesForDropdown();
+                openModal('transactionModal');
+            });
             document.getElementById('addSiteBtn').addEventListener('click', () => openModal('siteModal'));
             document.getElementById('addStaffBtn').addEventListener('click', () => openModal('staffModal'));
-            
-            // Forms
             document.getElementById('transactionForm').addEventListener('submit', handleTransactionSubmit);
             document.getElementById('siteForm').addEventListener('submit', handleSiteSubmit);
             document.getElementById('staffForm').addEventListener('submit', handleStaffSubmit);
         }
 
-        async function handleLogin(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            const errorDiv = document.getElementById('loginError');
-
-            console.log('Login attempt:', username);
-
-            // Check hardcoded admins
-            const admin = ADMIN_USERS.find(u => u.username === username && u.password === password);
-            if (admin) {
-                console.log('✅ Admin login successful');
-                currentUser = admin;
-                localStorage.setItem('currentUser', JSON.stringify(admin));
-                showMainApp();
-                return;
-            }
-
-            // Check Supabase staff (if configured)
-            if (useSupabase) {
-                try {
-                    const { data, error } = await supabase
-                        .from('staff')
-                        .select('*')
-                        .eq('username', username)
-                        .eq('password', password)
-                        .single();
-
-                    if (data) {
-                        console.log('✅ Staff login successful');
-                        currentUser = { ...data, role: 'staff' };
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        showMainApp();
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Supabase login error:', error);
-                }
-            }
-
-            // Check localStorage staff (demo mode)
-            const staff = Storage.get('staff').find(s => s.username === username && s.password === password);
-            if (staff) {
-                console.log('✅ Staff login successful (demo)');
-                currentUser = { ...staff, role: 'staff' };
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                showMainApp();
-                return;
-            }
-
-            console.log('❌ Login failed');
-            errorDiv.textContent = translations[currentLang].loginError;
-            errorDiv.classList.add('show');
-            setTimeout(() => errorDiv.classList.remove('show'), 3000);
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('currentUser');
-            currentUser = null;
-            document.getElementById('mainApp').classList.remove('active');
-            document.getElementById('loginScreen').classList.add('active');
-            document.getElementById('loginForm').reset();
-        }
-
-        function showMainApp() {
-            document.getElementById('loginScreen').classList.remove('active');
-            document.getElementById('mainApp').classList.add('active');
-            
-            const welcomeText = translations[currentLang].welcome;
-            document.getElementById('welcomeMsg').textContent = `${welcomeText}, ${currentUser.name}!`;
-            
-            // Hide admin-only elements for staff
-            if (currentUser.role !== 'admin') {
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
-            } else {
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
-            }
-            
-            loadDashboard();
-        }
-
         function toggleLanguage() {
             currentLang = currentLang === 'mr' ? 'en' : 'mr';
             document.getElementById('langToggle').textContent = currentLang === 'mr' ? 'EN' : 'मराठी';
-            
             document.querySelectorAll('[data-lang-mr]').forEach(el => {
                 el.textContent = el.dataset[`lang${currentLang.charAt(0).toUpperCase() + currentLang.slice(1)}`];
             });
-            
             loadDashboard();
         }
 
         function switchSection(sectionId) {
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
             document.getElementById(sectionId).classList.add('active');
-            
             if (sectionId === 'dashboard') loadDashboard();
             else if (sectionId === 'transactions') loadTransactions();
             else if (sectionId === 'sites') loadSites();
@@ -1042,61 +780,62 @@
             else if (sectionId === 'reports') loadReports();
         }
 
-        async function loadDashboard() {
-            let transactions = [];
-            
+        async function getData(table) {
             if (useSupabase) {
-                try {
-                    const { data } = await supabase.from('transactions').select('*');
-                    transactions = data || [];
-                } catch (error) {
-                    console.error('Error loading transactions:', error);
-                }
-            } else {
-                transactions = Storage.get('transactions');
+                const { data } = await supabase.from(table).select('*');
+                return data || [];
             }
-            
-            let totalIncome = 0;
-            let totalExpense = 0;
-            
+            return Storage.get(table);
+        }
+
+        async function saveData(table, item) {
+            if (useSupabase) {
+                await supabase.from(table).insert([item]);
+            } else {
+                Storage.add(table, item);
+            }
+        }
+
+        async function deleteData(table, id) {
+            if (useSupabase) {
+                await supabase.from(table).delete().eq('id', id);
+            } else {
+                Storage.delete(table, id);
+            }
+        }
+
+        async function clearTable(table) {
+            if (useSupabase) {
+                await supabase.from(table).delete().neq('id', 0);
+            } else {
+                Storage.clear(table);
+            }
+        }
+
+        async function loadDashboard() {
+            const transactions = await getData('transactions');
+            let totalIncome = 0, totalExpense = 0;
             transactions.forEach(t => {
                 if (t.type === 'income') totalIncome += parseFloat(t.amount);
                 else totalExpense += parseFloat(t.amount);
             });
-            
             document.getElementById('totalIncome').textContent = `₹${totalIncome.toLocaleString()}`;
             document.getElementById('totalExpense').textContent = `₹${totalExpense.toLocaleString()}`;
             document.getElementById('totalBalance').textContent = `₹${(totalIncome - totalExpense).toLocaleString()}`;
-            
-            // Recent transactions
             const recent = transactions.slice(-5).reverse();
-            const tbody = document.getElementById('recentTransactions');
-            tbody.innerHTML = recent.map(t => `
+            document.getElementById('recentTransactions').innerHTML = recent.map(t => `
                 <tr>
                     <td>${t.date}</td>
                     <td><span class="badge badge-${t.type}">${translations[currentLang][t.type]}</span></td>
                     <td>₹${parseFloat(t.amount).toLocaleString()}</td>
                     <td>${t.site_name}</td>
                 </tr>
-            `).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No transactions yet</td></tr>';
+            `).join('') || `<tr><td colspan="4" style="text-align:center;color:#718096;">${translations[currentLang].noData}</td></tr>`;
         }
 
         async function loadTransactions() {
-            let transactions = [];
-            
-            if (useSupabase) {
-                try {
-                    const { data } = await supabase.from('transactions').select('*').order('date', { ascending: false });
-                    transactions = data || [];
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                transactions = Storage.get('transactions').reverse();
-            }
-            
-            const tbody = document.getElementById('allTransactions');
-            tbody.innerHTML = transactions.map(t => `
+            const transactions = (await getData('transactions')).reverse();
+            document.getElementById('allTransactions').innerHTML = transactions.map(t => `
                 <tr>
                     <td>${t.date}</td>
                     <td><span class="badge badge-${t.type}">${translations[currentLang][t.type]}</span></td>
@@ -1105,150 +844,64 @@
                     <td>${t.payment_mode}</td>
                     <td>${t.note || '-'}</td>
                 </tr>
-            `).join('') || '<tr><td colspan="6" style="text-align:center;color:#718096;">No transactions yet</td></tr>';
+            `).join('') || `<tr><td colspan="6" style="text-align:center;color:#718096;">${translations[currentLang].noData}</td></tr>`;
         }
 
         async function loadSites() {
-            let sites = [];
-            let transactions = [];
-            
-            if (useSupabase) {
-                try {
-                    const { data: sitesData } = await supabase.from('sites').select('*');
-                    const { data: transData } = await supabase.from('transactions').select('*');
-                    sites = sitesData || [];
-                    transactions = transData || [];
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                sites = Storage.get('sites');
-                transactions = Storage.get('transactions');
-            }
-            
-            const tbody = document.getElementById('sitesList');
-            tbody.innerHTML = sites.map(site => {
-                const siteTrans = transactions.filter(t => t.site_id === site.id);
-                const income = siteTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
-                const expense = siteTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
-                
-                return `
-                    <tr>
-                        <td>${site.name}</td>
-                        <td>${site.location}</td>
-                        <td>₹${income.toLocaleString()}</td>
-                        <td>₹${expense.toLocaleString()}</td>
-                    </tr>
-                `;
-            }).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No sites yet</td></tr>';
-            
-            // Update site dropdown
-            const select = document.getElementById('transSite');
-            select.innerHTML = sites.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            const sites = await getData('sites');
+            const transactions = await getData('transactions');
+            document.getElementById('sitesList').innerHTML = sites.map(site => {
+                const siteTrans = transactions.filter(t => t.site_id == site.id);
+                const income = siteTrans.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+                const expense = siteTrans.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
+                return `<tr><td>${site.name}</td><td>${site.location}</td><td>₹${income.toLocaleString()}</td><td>₹${expense.toLocaleString()}</td></tr>`;
+            }).join('') || `<tr><td colspan="4" style="text-align:center;color:#718096;">${translations[currentLang].noData}</td></tr>`;
+        }
+
+        async function loadSitesForDropdown() {
+            const sites = await getData('sites');
+            document.getElementById('transSite').innerHTML = sites.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
         }
 
         async function loadStaff() {
-            if (currentUser.role !== 'admin') return;
-            
-            let staff = [];
-            
-            if (useSupabase) {
-                try {
-                    const { data } = await supabase.from('staff').select('*');
-                    staff = data || [];
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                staff = Storage.get('staff');
-            }
-            
-            const tbody = document.getElementById('staffList');
-            tbody.innerHTML = staff.map(s => `
+            const staff = await getData('staff');
+            document.getElementById('staffList').innerHTML = staff.map(s => `
                 <tr>
                     <td>${s.name}</td>
                     <td>${s.username}</td>
                     <td><span class="badge badge-staff">${translations[currentLang].staff}</span></td>
                     <td><button class="btn btn-danger" onclick="deleteStaff(${s.id})">${translations[currentLang].delete}</button></td>
                 </tr>
-            `).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No staff yet</td></tr>';
+            `).join('') || `<tr><td colspan="4" style="text-align:center;color:#718096;">${translations[currentLang].noData}</td></tr>`;
         }
 
         async function loadReports() {
-            let sites = [];
-            let transactions = [];
-            
-            if (useSupabase) {
-                try {
-                    const { data: sitesData } = await supabase.from('sites').select('*');
-                    const { data: transData } = await supabase.from('transactions').select('*');
-                    sites = sitesData || [];
-                    transactions = transData || [];
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                sites = Storage.get('sites');
-                transactions = Storage.get('transactions');
-            }
-            
-            const tbody = document.getElementById('siteReports');
-            tbody.innerHTML = sites.map(site => {
-                const siteTrans = transactions.filter(t => t.site_id === site.id);
-                const income = siteTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
-                const expense = siteTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            const sites = await getData('sites');
+            const transactions = await getData('transactions');
+            document.getElementById('siteReports').innerHTML = sites.map(site => {
+                const siteTrans = transactions.filter(t => t.site_id == site.id);
+                const income = siteTrans.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+                const expense = siteTrans.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
                 const profit = income - expense;
-                
-                return `
-                    <tr>
-                        <td>${site.name}</td>
-                        <td>₹${income.toLocaleString()}</td>
-                        <td>₹${expense.toLocaleString()}</td>
-                        <td style="color: ${profit >= 0 ? '#48bb78' : '#f56565'}">₹${profit.toLocaleString()}</td>
-                    </tr>
-                `;
-            }).join('') || '<tr><td colspan="4" style="text-align:center;color:#718096;">No data yet</td></tr>';
+                return `<tr><td>${site.name}</td><td>₹${income.toLocaleString()}</td><td>₹${expense.toLocaleString()}</td><td style="color:${profit >= 0 ? '#48bb78' : '#f56565'}">₹${profit.toLocaleString()}</td></tr>`;
+            }).join('') || `<tr><td colspan="4" style="text-align:center;color:#718096;">${translations[currentLang].noData}</td></tr>`;
         }
 
         async function handleTransactionSubmit(e) {
             e.preventDefault();
-            
             const siteId = document.getElementById('transSite').value;
-            let siteName = '';
-            
-            if (useSupabase) {
-                try {
-                    const { data: site } = await supabase.from('sites').select('name').eq('id', siteId).single();
-                    siteName = site?.name || '';
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                const site = Storage.get('sites').find(s => s.id == siteId);
-                siteName = site?.name || '';
-            }
-            
-            const transaction = {
+            const sites = await getData('sites');
+            const site = sites.find(s => s.id == siteId);
+            await saveData('transactions', {
                 date: document.getElementById('transDate').value,
                 type: document.getElementById('transType').value,
                 amount: document.getElementById('transAmount').value,
                 site_id: siteId,
-                site_name: siteName,
+                site_name: site?.name || '',
                 payment_mode: document.getElementById('transPaymentMode').value,
                 note: document.getElementById('transNote').value,
-                added_by: currentUser.username
-            };
-            
-            if (useSupabase) {
-                try {
-                    await supabase.from('transactions').insert([transaction]);
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                Storage.add('transactions', transaction);
-            }
-            
+                added_by: 'admin'
+            });
             closeModal('transactionModal');
             document.getElementById('transactionForm').reset();
             loadDashboard();
@@ -1257,22 +910,10 @@
 
         async function handleSiteSubmit(e) {
             e.preventDefault();
-            
-            const site = {
+            await saveData('sites', {
                 name: document.getElementById('siteName').value,
                 location: document.getElementById('siteLocation').value
-            };
-            
-            if (useSupabase) {
-                try {
-                    await supabase.from('sites').insert([site]);
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                Storage.add('sites', site);
-            }
-            
+            });
             closeModal('siteModal');
             document.getElementById('siteForm').reset();
             loadSites();
@@ -1281,23 +922,11 @@
 
         async function handleStaffSubmit(e) {
             e.preventDefault();
-            
-            const staff = {
+            await saveData('staff', {
                 name: document.getElementById('staffName').value,
                 username: document.getElementById('staffUsername').value,
                 password: document.getElementById('staffPassword').value
-            };
-            
-            if (useSupabase) {
-                try {
-                    await supabase.from('staff').insert([staff]);
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            } else {
-                Storage.add('staff', staff);
-            }
-            
+            });
             closeModal('staffModal');
             document.getElementById('staffForm').reset();
             loadStaff();
@@ -1306,26 +935,195 @@
 
         async function deleteStaff(id) {
             if (confirm('Are you sure?')) {
-                if (useSupabase) {
-                    try {
-                        await supabase.from('staff').delete().eq('id', id);
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                } else {
-                    Storage.delete('staff', id);
-                }
+                await deleteData('staff', id);
                 loadStaff();
                 alert(translations[currentLang].staffDeleted);
             }
         }
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // ========== BACKUP & RESTORE ==========
+
+        async function backupData() {
+            const statusEl = document.getElementById('backupStatus');
+            try {
+                statusEl.className = 'status-msg info';
+                statusEl.textContent = currentLang === 'mr' ? '⏳ डेटा गोळा करत आहे...' : '⏳ Collecting data...';
+                
+                const sites = await getData('sites');
+                const transactions = await getData('transactions');
+                const staff = await getData('staff');
+
+                const backupData = {
+                    version: '1.0',
+                    backupDate: new Date().toISOString(),
+                    app: 'Construction Accounting',
+                    data: { sites, transactions, staff }
+                };
+
+                const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const dateStr = new Date().toISOString().split('T')[0];
+                a.href = url;
+                a.download = `construction-backup-${dateStr}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                statusEl.className = 'status-msg success';
+                statusEl.textContent = `${translations[currentLang].backupSuccess} (${sites.length} sites, ${transactions.length} transactions, ${staff.length} staff)`;
+            } catch (error) {
+                console.error('Backup error:', error);
+                statusEl.className = 'status-msg error';
+                statusEl.textContent = translations[currentLang].backupError + ': ' + error.message;
+            }
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const fileNameEl = document.getElementById('fileName');
+            const optionsEl = document.getElementById('restoreOptions');
+            const statusEl = document.getElementById('restoreStatus');
+            statusEl.className = 'status-msg';
+            
+            if (!file) {
+                selectedBackupFile = null;
+                fileNameEl.textContent = '';
+                optionsEl.classList.remove('show');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!data.data || (!data.data.sites && !data.data.transactions && !data.data.staff)) {
+                        throw new Error('Invalid backup format');
+                    }
+                    selectedBackupFile = data;
+                    fileNameEl.textContent = `✅ ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                    optionsEl.classList.add('show');
+                } catch (err) {
+                    selectedBackupFile = null;
+                    fileNameEl.textContent = '';
+                    optionsEl.classList.remove('show');
+                    statusEl.className = 'status-msg error';
+                    statusEl.textContent = translations[currentLang].invalidFile;
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        async function restoreData() {
+            if (!selectedBackupFile) return;
+            const statusEl = document.getElementById('restoreStatus');
+            const mode = document.querySelector('input[name="restoreMode"]:checked').value;
+
+            if (mode === 'overwrite') {
+                if (!confirm(translations[currentLang].confirmOverwrite)) return;
+            }
+
+            try {
+                statusEl.className = 'status-msg info';
+                statusEl.textContent = currentLang === 'mr' ? '⏳ रिस्टोर करत आहे...' : '⏳ Restoring...';
+
+                const backup = selectedBackupFile.data;
+                let sitesAdded = 0, transAdded = 0, staffAdded = 0;
+
+                if (mode === 'overwrite') {
+                    // Clear all existing data
+                    await clearTable('transactions');
+                    await clearTable('sites');
+                    await clearTable('staff');
+
+                    // Insert new data
+                    if (backup.sites) {
+                        for (const site of backup.sites) {
+                            const { id, created_at, ...cleanSite } = site;
+                            await saveData('sites', cleanSite);
+                            sitesAdded++;
+                        }
+                    }
+                    if (backup.transactions) {
+                        for (const trans of backup.transactions) {
+                            const { id, created_at, ...cleanTrans } = trans;
+                            await saveData('transactions', cleanTrans);
+                            transAdded++;
+                        }
+                    }
+                    if (backup.staff) {
+                        for (const s of backup.staff) {
+                            const { id, created_at, ...cleanStaff } = s;
+                            await saveData('staff', cleanStaff);
+                            staffAdded++;
+                        }
+                    }
+                } else {
+                    // Merge mode - add only new items
+                    const existingSites = await getData('sites');
+                    const existingTrans = await getData('transactions');
+                    const existingStaff = await getData('staff');
+
+                    if (backup.sites) {
+                        for (const site of backup.sites) {
+                            const exists = existingSites.some(s => s.name === site.name && s.location === site.location);
+                            if (!exists) {
+                                const { id, created_at, ...cleanSite } = site;
+                                await saveData('sites', cleanSite);
+                                sitesAdded++;
+                            }
+                        }
+                    }
+                    if (backup.transactions) {
+                        for (const trans of backup.transactions) {
+                            const exists = existingTrans.some(t => 
+                                t.date === trans.date && 
+                                t.amount == trans.amount && 
+                                t.type === trans.type &&
+                                t.site_name === trans.site_name
+                            );
+                            if (!exists) {
+                                const { id, created_at, ...cleanTrans } = trans;
+                                await saveData('transactions', cleanTrans);
+                                transAdded++;
+                            }
+                        }
+                    }
+                    if (backup.staff) {
+                        for (const s of backup.staff) {
+                            const exists = existingStaff.some(st => st.username === s.username);
+                            if (!exists) {
+                                const { id, created_at, ...cleanStaff } = s;
+                                await saveData('staff', cleanStaff);
+                                staffAdded++;
+                            }
+                        }
+                    }
+                }
+
+                statusEl.className = 'status-msg success';
+                const msg = currentLang === 'mr' 
+                    ? `✅ रिस्टोर यशस्वी! जोडले: ${sitesAdded} साइट्स, ${transAdded} व्यवहार, ${staffAdded} कर्मचारी`
+                    : `✅ Restore successful! Added: ${sitesAdded} sites, ${transAdded} transactions, ${staffAdded} staff`;
+                statusEl.textContent = msg;
+
+                // Reset file input
+                document.getElementById('restoreFile').value = '';
+                document.getElementById('fileName').textContent = '';
+                document.getElementById('restoreOptions').classList.remove('show');
+                selectedBackupFile = null;
+
+                // Reload all data
+                loadDashboard();
+            } catch (error) {
+                console.error('Restore error:', error);
+                statusEl.className = 'status-msg error';
+                statusEl.textContent = translations[currentLang].restoreError + ': ' + error.message;
+            }
         }
     </script>
 </body>
